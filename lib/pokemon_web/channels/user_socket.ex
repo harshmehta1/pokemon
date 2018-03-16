@@ -2,7 +2,7 @@ defmodule PokemonWeb.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "room:*", PokemonWeb.RoomChannel
+  channel "games:*", PokemonWeb.GamesChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket
