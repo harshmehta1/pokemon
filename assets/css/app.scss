@@ -1,2 +1,18 @@
 /* This file is for your main application css. */
 @import "bootstrap";
+
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.index{
+  margin: auto;
+  padding: 10px;
+  text-align: center;
+}
+
+body {
+  background-color: #81E1FE;
+}
