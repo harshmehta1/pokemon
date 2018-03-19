@@ -4,7 +4,10 @@ defmodule Pokemon.Game do
     # init game
 
 
-    [%{player1: %{}}]
+    %{
+      player1: %{}
+      player2: %{}
+    }
 
 
 
@@ -13,7 +16,10 @@ defmodule Pokemon.Game do
 
    def addPlayer(game) do
 
-     [%{player1: %{}},%{player2: %{}}]
+     %{
+       player1: %{},
+       player2: %{}
+      }
   end
 
   def client_view(game) do

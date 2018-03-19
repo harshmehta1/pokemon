@@ -27,7 +27,6 @@ class Battle extends React.Component {
   render(){
     return (
     <div className="container">
-      <h1>SAMPLE CONTENT - GAME WILL GO HERE!</h1>
     <div className="players">
       <div className="player1">
         <span><h2> Player 1 </h2></span>
@@ -35,12 +34,12 @@ class Battle extends React.Component {
         <Button className="attack-btn"> Attack 2 </Button>
         <Button className="attack-btn"> Attack 3 </Button>
         <Button className="attack-btn"> Attack 4 </Button>
-        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+        <div className="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
           100
         </div>
         <br />
         <p> Health </p>
-        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <div className="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
           0
         </div>
         <p> Energy </p>
@@ -51,12 +50,12 @@ class Battle extends React.Component {
         <Button className="attack-btn"> Attack 2 </Button>
         <Button className="attack-btn"> Attack 3 </Button>
         <Button className="attack-btn"> Attack 4 </Button>
-        <div class="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
+        <div className="progress-bar" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
           100
         </div>
         <br />
         <p> Health </p>
-        <div class="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
+        <div className="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100">
           0
         </div>
         <p> Energy </p>
