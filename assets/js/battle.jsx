@@ -3,7 +3,7 @@ import ReactDOM from 'react-dom';
 import { Button } from 'reactstrap';
 
 export default function play_game(root, channel){
-  ReactDOM.render(<Battle channel={channel}/>, root);
+  ReactDOM.render(<Battle channel={channel} />, root);
 }
 
 class Battle extends React.Component {
@@ -11,7 +11,7 @@ class Battle extends React.Component {
   constructor(props){
     super(props);
     this.channel = props.channel;
-    this.state = {skel: [], tilesMatched: 0, score: 0, paused: false, tilesSelected: 0};
+    this.state = {skel: []};
 
     this.channel.join()
       .receive("ok", this.gotView.bind(this))
@@ -24,8 +24,6 @@ class Battle extends React.Component {
   }
 
   render(){
-
-
     return (
     <div className="container">
       <h1>SAMPLE CONTENT - GAME WILL GO HERE!</h1>

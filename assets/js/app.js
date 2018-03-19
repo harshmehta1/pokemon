@@ -19,6 +19,11 @@ import "phoenix_html"
 // paths "./socket" or full ones "web/static/js/socket".
 
 // import socket from "./socket"
+import play_game from "./battle";
+import socket from "./socket";
+
+
+
 function start(){
   let root = document.getElementById('game');
   if(root) {
