@@ -1,15 +1,32 @@
 defmodule Pokemon.Game do
+
   def new do
+    # init game
+
+
+    [%{player1: %{}}]
+
+
+
+    end
+
+
+   def addPlayer(game) do
+
+     [%{player1: %{}},%{player2: %{}}]
+  end
+
+  def client_view(game) do
     %{
-      skel: []
+      #state here
     }
   end
-  @doc """
-  This functions sets the view at the client side
-"""
-def client_view(game) do
-  %{
-    skel: [],
-  }
-end
+
+   def pokemon() do
+
+
+    %{
+
+    }
+  end
 end

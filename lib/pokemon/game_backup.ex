@@ -1,6 +1,9 @@
 defmodule Pokemon.GameBackup do
   use Agent
 
+# Attribution to Nat Tuck
+# https://github.com/NatTuck/hangman2/blob/proc-state/lib/hangman/game_backup.ex
+
   def start_link do
     Agent.start_link(fn -> %{} end, name: __MODULE__)
   end
@@ -16,5 +19,4 @@ defmodule Pokemon.GameBackup do
       Map.get(state, name)
     end
   end
-
 end
