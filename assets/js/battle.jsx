@@ -11,7 +11,7 @@ class Battle extends React.Component {
   constructor(props){
     super(props);
     this.channel = props.channel;
-    this.state = {p1health: 100, p1energy: 0,  p2health: 100, p2energy: 0,};
+    this.state = {player1: [], player2: [], poke1: [], poke2: []};
 
     this.channel.join()
       .receive("ok", this.gotView.bind(this))

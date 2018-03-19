@@ -5,8 +5,10 @@ defmodule Pokemon.Game do
 
 
     %{
-      player1: %{}
-      player2: %{}
+      player1: [],
+      player2: [],
+      poke1: [],
+      poke2: [],
     }
 
 
@@ -17,8 +19,8 @@ defmodule Pokemon.Game do
    def addPlayer(game) do
 
      %{
-       player1: %{},
-       player2: %{}
+       player1: [],
+       player2: [],
       }
   end
 

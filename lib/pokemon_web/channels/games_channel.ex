@@ -4,8 +4,10 @@ defmodule PokemonWeb.GamesChannel do
   alias Pokemon.Game
 
   def join("games:" <> name, payload, socket) do
+    IO.inspect(name)
     if authorized?(payload) do
       game = Pokemon.GameBackup.load(name) || Game.new()
+      game = Game.new()
       socket = socket
       |> assign(:game, game)
       |> assign(:name, name)
