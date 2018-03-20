@@ -7,14 +7,29 @@ defmodule Pokemon.Game do
       player2: [],
       poke1: [],
       poke2: [],
+      state: 0,
     }
   end
 
- def addPlayer(game) do
+ def addPlayer(game, player, pokemon) do
+   state = game.state
+   if player == 1 do
      %{
-       player1: [],
-       player2: [],
+       player1: game.player1 ++ [[pokemon, 100, 0]],
+       player2: game.player2,
+       poke1: game.poke1 ++ [[pokemon]],
+       poke2: game.poke2,
+       state: game.state
       }
+   else
+     %{
+       player1: game.player1,
+       player2: game.player2 ++ [[pokemon, 100, 0]],
+       poke1: game.poke1,
+       poke2: game.poke2 ++ [[pokemon]],
+       state: game.state
+      }
+    end
   end
 
   def client_view(game) do
@@ -55,4 +70,6 @@ defmodule Pokemon.Game do
       :weakness => "Fire"},
    ]
   end
+ 
+
 end
