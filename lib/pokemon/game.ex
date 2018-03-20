@@ -36,21 +36,21 @@ defmodule Pokemon.Game do
        :attacks => %{:scratch => 10,
                      :lava_burn => 20,
                      :fire_fang => 30,
-                     :spl_inferno => 50}
+                     :spl_inferno => 50},
        :type => "Fire",
        :weakness => "Water"},
     %{:name => "Squirtle", :hp => 100, :energy => 100,
         :attacks => %{:tail_whip => 10,
                       :water_gun => 20,
                       :aqua_tail => 30,
-                      :spl_hydro_pump => 50}
+                      :spl_hydro_pump => 50},
         :type => "Water",
         :weakness => "Electric"},
     %{:name => "Bulbasaur", :hp => 100, :energy => 100,
        :attacks => %{:tackle => 10,
                      :vine_whip => 20,
                      :razor_leaf => 30,
-                     :spl_seed_bomb => 50}
+                     :spl_seed_bomb => 50},
       :type => "Grass",
       :weakness => "Fire"},
    ]

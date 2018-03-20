@@ -60,9 +60,7 @@ class Battle extends React.Component {
         </div>
         <p> Energy </p>
       </div>
-
     </div>
-
     </div>
 
     );
