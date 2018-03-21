@@ -11,6 +11,7 @@ class Battle extends React.Component {
   constructor(props){
     super(props);
     this.channel = props.channel;
+    this.userName = props.channel.params.userName;
     this.state = {player1: "", player2: "", poke1: [], poke2: [], observers: [], players_turn: ""};
 
     this.channel.join()
@@ -34,7 +35,7 @@ class Battle extends React.Component {
     </div>
     <div className="players">
       <div className="player1">
-        <span><h3> Player 1 </h3></span>
+        <span><h3> Player 1: {this.userName} </h3></span>
         <div class="space"></div>
         <div className="progress-bar bg-success" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">
           100
