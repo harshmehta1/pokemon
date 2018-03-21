@@ -1,4 +1,4 @@
-<h1 align="center">Pokemon Gold. Channel: <%= @game %></h1>
+<h1 align="center">Pokemon Gold. Channel: <%= @game %>. User: <%= @userName %>.</h1>
 <script>
   window.gameName = "<%= @game %>";
   window.userName = "<%= @userName %>";

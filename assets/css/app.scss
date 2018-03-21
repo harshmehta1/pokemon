@@ -20,6 +20,11 @@
   text-align: center;
 }
 
+#centered_buttons {
+  display: flex;
+  justify-content: center;  
+}
+
 
 .progress-label {
   float: left;
