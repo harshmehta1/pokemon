@@ -23,7 +23,7 @@ class Battle extends React.Component {
     this.setState(view.game);
   }
 
-  //states: 0=waiting for second player; 1=player 1 turn; 2=player 2 turn; 
+  //states: 0=waiting for second player; 1=player 1 turn; 2=player 2 turn;
   //3=game over
 
   render(){
@@ -35,7 +35,7 @@ class Battle extends React.Component {
          <h1> Waiting On Second Player..... </h1>
       </div>
     )}
-    else if (this.state.state == 1) {  
+    else if (this.state.state == 1) {
     return (
     <div className="container">
     <div className="players">
@@ -76,7 +76,7 @@ class Battle extends React.Component {
     </div>
 
     )}
-    else if (this.state.state == 2) {  
+    else if (this.state.state == 2) {
     return (
     <div className="container">
     <div className="players">
