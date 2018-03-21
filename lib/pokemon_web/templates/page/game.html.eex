@@ -1,6 +1,7 @@
 <h1 align="center">Pokemon Gold. Channel: <%= @game %></h1>
 <script>
   window.gameName = "<%= @game %>";
+  window.userName = "<%= @userName %>";
 </script>
 <div id="game">
   Loading...

@@ -1,15 +1,43 @@
+<script>
+  function joinChannel() {
+    let game = $("#game").val();
+    if (game === "") {
+      alert("Please enter a game name.");
+      return;
+    }
+    let userName = $("#userName").val();
+    if (userName === "") {
+      alert("Please enter a user name.");
+      return;
+    }
+    let link = "/game/" + game + "?userName=" + userName;
+    window.location.href = link;
+  }
+</script>
+
 <div class="container">
   <div class="row">
-    <div class="col"><br>
+    <div class="col"><br />
       <div class="index">
         <img src="./images/poke-logo.png" class="logo" style="width:20%"><br>
-        <h2 id="index-page">Ready to catch 'em all?<br>Create a game or Join an exisiting one!</h2><br>
-        <form onsubmit="this.action='/game/'+this.txt.value;">
-          Enter a channel name to create/join: <input type="text" id="txt"><br><br>
-          <button type="submit" class="btn btn-primary">Let's play!</button>
-          <button type="button" class="btn btn-warning">How to play?</button>
-        </form>
+        <h2 id="index-page">Ready to catch 'em all?<br>Create a game or Join an exisiting one!</h2><br />
+        <div class="col">
+          Enter a channel name to create/join:
+          <input id="game" type="text"/>
+         </div>
+         <div class="row"><br /></div>
+         <div class="col">
+           <span>Enter a username:</span>
+           <input id="userName" type="text"/>
+         </div>
+        </div>
+        <div class="row"><br /></div>
+        <div class="row">
+          <div class="col">
+            <input id="game-btn" type="button" onClick="joinChannel()" value="Let's Play">
+            <button type="button" class="btn btn-warning">How to play?</button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+ </div>
