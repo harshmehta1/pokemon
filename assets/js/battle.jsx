@@ -111,9 +111,7 @@ class Battle extends React.Component {
         </div>
         <p class="progress-label"> Energy </p>
       </div>
-
     </div>
-
     </div>
 
     )};
