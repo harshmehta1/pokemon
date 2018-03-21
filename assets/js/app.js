@@ -32,7 +32,7 @@ function landing_init() {
 function start(){
   let root = document.getElementById('game');
   if(root) {
-    let channel = socket.channel("games:" + window.gameName, {});
+    let channel = socket.channel("games:" + window.gameName, {"userName": window.userName});
     play_game(root, channel);
   }
 
