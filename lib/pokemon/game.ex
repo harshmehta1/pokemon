@@ -44,39 +44,83 @@ defmodule Pokemon.Game do
     }
   end
 
- def genInitPokemons() do
-   [
-     %{:name => "Pikachu", :hp => 100, :energy => 100,
-        :attacks => %{:quick_attack => 10,
-                      :electric_shock => 20,
-                      :thunder_bolt => 30,
-                      :spl_thunder_shock => 50},
-        :type => "Electric",
-        :weakness => "Grass"},
-    %{:name => "Charmander", :hp => 100, :energy => 100,
-       :attacks => %{:scratch => 10,
-                     :lava_burn => 20,
-                     :fire_fang => 30,
-                     :spl_inferno => 50},
-       :type => "Fire",
-       :weakness => "Water"},
-    %{:name => "Squirtle", :hp => 100, :energy => 100,
-        :attacks => %{:tail_whip => 10,
-                      :water_gun => 20,
-                      :aqua_tail => 30,
-                      :spl_hydro_pump => 50},
-        :type => "Water",
-        :weakness => "Electric"},
-    %{:name => "Bulbasaur", :hp => 100, :energy => 100,
-       :attacks => %{:tackle => 10,
-                     :vine_whip => 20,
-                     :razor_leaf => 30,
-                     :spl_seed_bomb => 50},
-      :type => "Grass",
-      :weakness => "Fire"},
-   ]
-  end
+def getPokeList() do
+  [
+  %{:name => "Pikachu", :hp => 100, :energy => 0,
+      :attacks => [%{:name => "Quick Attack",
+                     :dmg => 10,
+                     :spl => false},
+                  %{:name => "Electric Shock",
+                    :dmg => 20,
+                    :spl => false},
+                  %{:name => "Thunder Bolt",
+                    :dmg => 30,
+                    :spl => false},
+                  %{:name => "Thunder Shock",
+                    :dmg => 50,
+                    :spl => true},],
+     :type => "Electric",
+     :weakness => "Grass",
+     :image => "/images/pikachu.png"},
+ %{:name => "Charmander", :hp => 100, :energy => 0,
+    :attacks => [%{:name => "Scratch",
+                    :dmg => 10,
+                    :spl => false},
+                  %{:name => "Lava Burn",
+                    :dmg => 20,
+                    :spl => false},
+                  %{:name => "Fire Fang",
+                    :dmg => 30,
+                    :spl => false},
+                  %{:name => "Inferno",
+                    :dmg => 50,
+                    :spl => true},],
+    :type => "Fire",
+    :weakness => "Water",
+    :image => "/images/charmander.png"},
+ %{:name => "Squirtle", :hp => 100, :energy => 0,
+ :attacks => [%{:name => "Tail Whip",
+                :dmg => 10,
+                :spl => false},
+             %{:name => "Water Gun",
+               :dmg => 20,
+               :spl => false},
+             %{:name => "Aqua Tail",
+               :dmg => 30,
+               :spl => false},
+             %{:name => "Hydro Pump",
+               :dmg => 50,
+               :spl => true},],
+     :type => "Water",
+     :weakness => "Electric",
+     :image => "/images/squirtle.png"},
+ %{:name => "Bulbasaur", :hp => 100, :energy => 0,
+ :attacks => [%{:name => "Tackle",
+                :dmg => 10,
+                :spl => false},
+             %{:name => "Vine Whip",
+               :dmg => 20,
+               :spl => false},
+             %{:name => "Razor Leaf",
+               :dmg => 30,
+               :spl => false},
+             %{:name => "Seed Bomb",
+               :dmg => 50,
+               :spl => true},],
+   :type => "Grass",
+   :weakness => "Fire",
+   :image => "/images/bulbasaur.png"},
+]
+end
 
+def randPokemon(game) do
+  pokelist = getPokeList()
+  poke = Enum.random(pokelist)
+  if game.player1 != "" and poke.name == Map.get(game.poke1, "name") do
+    poke = Enum.random(pokelist)
+  end
+  poke
+end
   # Method to determine state of userName
   defp get_player(game, userName) do
     cond do
@@ -95,31 +139,65 @@ defmodule Pokemon.Game do
     end
   end
 
+  def player_join(game) do
+    game
+  end
+
+  def update_state(game) do
+    %{
+      player1: Map.get(game, "player1"),
+      player2: Map.get(game, "player2"),
+      poke1: Map.get(game, "poke1"),
+      poke2: Map.get(game, "poke2"),
+      observers: [],
+      players_turn: ""
+    }
+  end
+
   # Add user to a game
+  # def add_user(game, userName) do
+  #   cond do
+  #     game.player1 == userName or game.player2 == userName or Enum.member?(game.observers, userName) ->
+  #       game
+  #     game.player1 == "" and game.player2 == "" ->
+  #       if :rand.uniform(2) == 1 do
+  #         Map.put(game, :player1, userName)
+  #       else
+  #         game
+  #         |> Map.put(:player2, userName)
+  #         |> Map.put(:players_turn, userName)
+  #       end
+  #     game.player1 == "" or game.player2 == "" ->
+  #       if game.player1 == "" do
+  #         Map.put(game, :player1, userName)
+  #       else
+  #         game
+  #         |> Map.put(:player2, userName)
+  #         |> Map.put(:players_turn, userName)
+  #       end
+  #     true ->
+  #       Map.put(game, :observers, List.insert_at(game.observers, -1, userName))
+  #   end
+  # end
+
   def add_user(game, userName) do
+    IO.inspect(userName)
     cond do
-      game.player1 == userName or game.player2 == userName or Enum.member?(game.observers, userName) ->
-        game
       game.player1 == "" and game.player2 == "" ->
-        if :rand.uniform(2) == 1 do
-          Map.put(game, :player1, userName)
-        else
-          game
-          |> Map.put(:player2, userName)
-          |> Map.put(:players_turn, userName)
-        end
-      game.player1 == "" or game.player2 == "" ->
-        if game.player1 == "" do
-          Map.put(game, :player1, userName)
-        else
-          game
-          |> Map.put(:player2, userName)
-          |> Map.put(:players_turn, userName)
-        end
+        pokemon = randPokemon(game)
+        pokemon = Map.put(pokemon, :id, "p1")
+        game = Map.replace!(game, :player1, userName)
+        game = Map.put(game, :poke1, pokemon)
+        IO.inspect(game)
+      game.player1 != "" and game.player2 == "" and game.player1 != userName ->
+        pokemon = randPokemon(game)
+        pokemon = Map.put(pokemon, :id, "p2")
+        game = Map.replace!(game, :player2, userName)
+        game = Map.put(game, :poke2, pokemon)
+        IO.inspect(game)
       true ->
-        Map.put(game, :observers, List.insert_at(game.observers, -1, userName))
+        game
+        IO.inspect(game)
     end
   end
- 
-
 end
