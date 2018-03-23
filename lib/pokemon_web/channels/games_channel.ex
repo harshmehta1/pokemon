@@ -31,4 +31,11 @@ defmodule PokemonWeb.GamesChannel do
     socket = assign(socket, :game, game)
     {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
   end
+
+  def handle_in("clicked", %{"atkBtn" => ii}, socket) do
+    game = Game.clicked(socket.assigns[:game], ii)
+    Pokemon.GameBackup.save(socket.assigns[:name], game)
+    socket = assign(socket, :game, game)
+    {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
+  end
 end

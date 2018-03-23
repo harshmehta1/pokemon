@@ -180,6 +180,21 @@ end
   #   end
   # end
 
+  # method to register clicks from UI
+  def clicked(game, selection) do
+    cond do
+      game.players_turn == game.player1 ->
+        %{ 
+           player1: game.player1,
+           player2: game.player2,
+           poke1: game.poke1.attacks.selection.dmg,
+           poke2: game.poke2,
+           observers: [],
+           players_turn: game.players_turn
+         }
+    end
+  end
+
   def add_user(game, userName) do
     IO.inspect(userName)
     cond do

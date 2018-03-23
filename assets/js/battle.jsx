@@ -32,10 +32,24 @@ class Battle extends React.Component {
   }
 
   clickAtk(atkBtn){
-
+    let btn = atkBtn;
+    let view = this.gotView.bind(this);
+    let chan = this.channel;
+    return function (event) {
+      chan.push("clicked", {atkBtn: btn})
+        .receive("ok", view);
+    }
   }
 
+
+
   render(){
+
+
+    let skill_button = null;
+    if (this.userName == this.state.players_turn) { 
+      skill_button = <Button id="stop">Fire! </Button>;
+    }
 
     let attack_list = <div></div>;
     if (this.userName == this.state.player1){
@@ -96,7 +110,6 @@ class Battle extends React.Component {
     }
 
 
-
     return (
     <div className="container">
       <div className="row">
@@ -141,11 +154,14 @@ class Battle extends React.Component {
         </div>
       </div>
       <div className="col">
+        <div class="space"></ div>
         <div id="progressbar">
           <div class="progress"></div>
-          <div class="progress-text"></div>
+          <div class="progress-text"> </div>
         </div>
-          <Button id="stop">Stop </Button>
+          <div class="centered_buttons">
+           {skill_button}
+          </ div>
         <div className="talk-bubble">
           <p id="dialog">Waiting for {this.state.players_turn} to attack</p>
         </div>
@@ -160,7 +176,7 @@ class Battle extends React.Component {
     var counter = 0,
     progressbar = setInterval(function() 
     {
-        $('#progressbar .progress-text').text("Your attack was " + counter + '% effective');
+        $('#progressbar .progress-text').text("Attack was " + counter + '% effective');
         $('#progressbar .progress').css({'width':counter+'%'});
         if (counter == 101) {
             clearInterval(progressbar);
