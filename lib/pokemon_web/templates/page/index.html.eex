@@ -13,6 +13,11 @@
     let link = "/game/" + game + "?userName=" + userName;
     window.location.href = link;
   }
+
+  function instructions() {
+  alert("1. Enter a channel name.\n2. Enter a username.\n3. Enter instructions for game here");
+  return;
+}
 </script>
 
 <div class="container">
@@ -32,10 +37,10 @@
          </div>
         </div>
         <div class="row"><br /></div>
-        <div class="row">
-          <div class="col">
+        <div class="centered_buttons">
+          <div class="centered_buttons">
             <input id="game-btn" type="button" onClick="joinChannel()" value="Let's Play">
-            <button type="button" class="btn btn-warning">How to play?</button>
+            <button type="button" class="btn btn-warning", onClick="instructions()">How to play?</button>
         </div>
       </div>
     </div>
