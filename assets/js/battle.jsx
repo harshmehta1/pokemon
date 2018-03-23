@@ -141,13 +141,42 @@ class Battle extends React.Component {
         </div>
       </div>
       <div className="col">
+        <div id="progressbar">
+          <div class="progress"></div>
+          <div class="progress-text"></div>
+        </div>
+          <Button id="stop">Stop </Button>
         <div className="talk-bubble">
-          <p id="dialog">Waiting for player 1 to attack</p>
+          <p id="dialog">Waiting for {this.state.players_turn} to attack</p>
         </div>
       </div>
     </div>
     </div>
     );
   }
-
 }
+
+  $(document).ready(function() {
+    var counter = 0,
+    progressbar = setInterval(function() 
+    {
+        $('#progressbar .progress-text').text("Your attack was " + counter + '% effective');
+        $('#progressbar .progress').css({'width':counter+'%'});
+        if (counter == 101) {
+            clearInterval(progressbar);
+            alert('Something went wrong!');
+        } else
+            counter = (++counter % 101)
+        
+    }, 1);
+    
+    $('#stop').click(function() {
+    clearInterval(progressbar);
+    });
+  });
+
+
+
+
+
+

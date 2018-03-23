@@ -150,7 +150,7 @@ end
       poke1: Map.get(game, "poke1"),
       poke2: Map.get(game, "poke2"),
       observers: [],
-      players_turn: ""
+      players_turn: Map.get(game, "players_turn")
     }
   end
 
@@ -187,6 +187,7 @@ end
         pokemon = randPokemon(game)
         pokemon = Map.put(pokemon, :id, "p1")
         game = Map.replace!(game, :player1, userName)
+        game = Map.replace!(game, :players_turn, userName)
         game = Map.put(game, :poke1, pokemon)
         IO.inspect(game)
       game.player1 != "" and game.player2 == "" and game.player1 != userName ->
