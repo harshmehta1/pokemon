@@ -22,8 +22,6 @@ class Battle extends React.Component {
       this.channel.push("update_state", game)
         .receive("ok", this.gotView.bind(this))
     });
-    // this.channel.push("player_joined", this.state)
-    //     .receive("ok", this.gotView.bind(this));
   }
 
   //gets view from the server and sets the state of the game
