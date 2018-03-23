@@ -38,4 +38,6 @@ defmodule PokemonWeb.GamesChannel do
     socket = assign(socket, :game, game)
     {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
   end
+
+
 end

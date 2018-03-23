@@ -12,7 +12,15 @@ class Battle extends React.Component {
     super(props);
     this.channel = props.channel;
     this.userName = props.channel.params.userName;
-    this.state = {player1: "", player2: "", poke1: [], poke2: [], observers: [], players_turn: ""};
+    this.state = {
+      player1: "", 
+      player2: "", 
+      poke1: [], 
+      poke2: [], 
+      observers: [], 
+      players_turn: "",
+      ready_to_fire: false
+    };
 
     this.channel.join()
       .receive("ok", this.gotView.bind(this))
@@ -42,10 +50,9 @@ class Battle extends React.Component {
 
 
   render(){
-
-
+ 
     let skill_button = null;
-    if (this.userName == this.state.players_turn) { 
+    if (this.userName == this.state.players_turn && this.state.ready_to_fire == true) { 
       skill_button = <Button id="stop">Fire! </Button>;
     }
 
@@ -161,7 +168,7 @@ class Battle extends React.Component {
            {skill_button}
           </ div>
         <div className="talk-bubble">
-          <p id="dialog">Waiting for {this.state.players_turn} to attack</p>
+          <p id="dialog">Waiting for {this.state.players_turn} to select  attack</p>
         </div>
       </div>
     </div>

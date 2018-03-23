@@ -8,7 +8,8 @@ defmodule Pokemon.Game do
       poke1: [],
       poke2: [],
       observers: [],
-      players_turn: ""
+      players_turn: "",
+      ready_to_fire: false
     }
   end
 
@@ -40,7 +41,7 @@ defmodule Pokemon.Game do
       poke1: game.poke1,
       poke2: game.poke2,
       observers: game.observers,
-      players_turn: game.players_turn
+      players_turn: game.players_turn,
     }
   end
 
@@ -150,7 +151,8 @@ end
       poke1: Map.get(game, "poke1"),
       poke2: Map.get(game, "poke2"),
       observers: [],
-      players_turn: Map.get(game, "players_turn")
+      players_turn: Map.get(game, "players_turn"),
+      ready_to_fire: Map.get(game, "ready_to_fire")
     }
   end
 
@@ -185,12 +187,13 @@ end
     cond do
       game.players_turn == game.player1 ->
         %{ 
-           player1: game.player1,
-           player2: game.player2,
-           poke1: game.poke1.attacks.selection.dmg,
-           poke2: game.poke2,
-           observers: [],
-           players_turn: game.players_turn
+          player1: Map.get(game, "player1"),
+          player2: Map.get(game, "player2"),
+          poke1: Map.get(game, "poke1"),
+          poke2: Map.get(game, "poke2"),
+          observers: [],
+          players_turn: Map.get(game, "players_turn"),
+          ready_to_fire: true
          }
     end
   end
@@ -216,4 +219,5 @@ end
         IO.inspect(game)
     end
   end
+
 end
