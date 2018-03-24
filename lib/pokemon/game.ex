@@ -7,8 +7,7 @@ defmodule Pokemon.Game do
       player2: "",
       poke1: [],
       poke2: [],
-      observers: [],
-      players_turn: "",
+      attacker: "",
       ready_to_fire: false
     }
   end
@@ -40,8 +39,7 @@ defmodule Pokemon.Game do
       player2: game.player2,
       poke1: game.poke1,
       poke2: game.poke2,
-      observers: game.observers,
-      players_turn: game.players_turn,
+      attacker: game.attacker,
     }
   end
 
@@ -151,51 +149,48 @@ end
       poke1: Map.get(game, "poke1"),
       poke2: Map.get(game, "poke2"),
       observers: [],
-      players_turn: Map.get(game, "players_turn"),
+      attacker: Map.get(game, "attacker"),
       ready_to_fire: Map.get(game, "ready_to_fire")
     }
   end
 
-  # Add user to a game
-  # def add_user(game, userName) do
-  #   cond do
-  #     game.player1 == userName or game.player2 == userName or Enum.member?(game.observers, userName) ->
-  #       game
-  #     game.player1 == "" and game.player2 == "" ->
-  #       if :rand.uniform(2) == 1 do
-  #         Map.put(game, :player1, userName)
-  #       else
-  #         game
-  #         |> Map.put(:player2, userName)
-  #         |> Map.put(:players_turn, userName)
-  #       end
-  #     game.player1 == "" or game.player2 == "" ->
-  #       if game.player1 == "" do
-  #         Map.put(game, :player1, userName)
-  #       else
-  #         game
-  #         |> Map.put(:player2, userName)
-  #         |> Map.put(:players_turn, userName)
-  #       end
-  #     true ->
-  #       Map.put(game, :observers, List.insert_at(game.observers, -1, userName))
-  #   end
-  # end
-
   # method to register clicks from UI
   def clicked(game, selection) do
     cond do
-      game.players_turn == game.player1 ->
-        %{ 
+      game.attacker == game.player1 ->
+        %{
           player1: Map.get(game, "player1"),
           player2: Map.get(game, "player2"),
           poke1: Map.get(game, "poke1"),
           poke2: Map.get(game, "poke2"),
           observers: [],
-          players_turn: Map.get(game, "players_turn"),
+          attacker: Map.get(game, "attacker"),
           ready_to_fire: true
          }
     end
+  end
+
+  def attack(game, atkMap) do
+      cond do
+        game.attacker == game.player1 ->
+          dmg = Map.get(atkMap, "dmg")
+          poke2hp = Map.get(game.poke2, "hp")
+          poke2hp = poke2hp - dmg
+          poke2 = Map.replace!(game.poke2, "hp", poke2hp)
+          game = Map.replace!(game, :poke2, poke2)
+          game = Map.replace!(game, :attacker, game.player2)
+          game
+        game.attacker == game.player2 ->
+          dmg = Map.get(atkMap, "dmg")
+          poke1hp = Map.get(game.poke1, "hp")
+          poke1hp = poke1hp - dmg
+          poke1 = Map.replace!(game.poke1, "hp", poke1hp)
+          game = Map.replace!(game, :poke1, poke1)
+          game = Map.replace!(game, :attacker, game.player1)
+          game
+        true ->
+          game
+      end
   end
 
   def add_user(game, userName) do
@@ -205,7 +200,7 @@ end
         pokemon = randPokemon(game)
         pokemon = Map.put(pokemon, :id, "p1")
         game = Map.replace!(game, :player1, userName)
-        game = Map.replace!(game, :players_turn, userName)
+        game = Map.replace!(game, :attacker, userName)
         game = Map.put(game, :poke1, pokemon)
         IO.inspect(game)
       game.player1 != "" and game.player2 == "" and game.player1 != userName ->

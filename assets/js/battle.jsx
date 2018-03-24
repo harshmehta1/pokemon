@@ -13,12 +13,11 @@ class Battle extends React.Component {
     this.channel = props.channel;
     this.userName = props.channel.params.userName;
     this.state = {
-      player1: "", 
-      player2: "", 
-      poke1: [], 
-      poke2: [], 
-      observers: [], 
-      players_turn: "",
+      player1: "",
+      player2: "",
+      poke1: [],
+      poke2: [],
+      attacker: "",
       ready_to_fire: false
     };
 
@@ -26,58 +25,52 @@ class Battle extends React.Component {
       .receive("ok", this.gotView.bind(this))
       .receive("error", resp => {console.log("Unable to join", resp) });
 
-    this.channel.on("user:joined", game => {
+    this.channel.on("state_update", game => {
       this.channel.push("update_state", game)
         .receive("ok", this.gotView.bind(this))
     });
   }
 
-  //gets view from the server and sets the state of the game
+  //gets view from the server and sets the state of the ga  me
   gotView(view){
     this.setState(view.game);
   }
 
   clickAtk(atkBtn){
-    let btn = atkBtn;
-    let view = this.gotView.bind(this);
-    let chan = this.channel;
-    return function (event) {
-      chan.push("clicked", {atkBtn: btn})
-        .receive("ok", view);
+    if(this.state.attacker == this.userName){
+      this.channel.push("attack", atkBtn)
+          .receive("ok", this.gotView.bind(this));
     }
   }
 
 
 
+
   render(){
- 
+
     let skill_button = null;
-    if (this.userName == this.state.players_turn && this.state.ready_to_fire == true) { 
+    let empty_div = <div></div>;
+    if (this.userName == this.state.attacker && this.state.ready_to_fire == true) {
       skill_button = <Button id="stop">Fire! </Button>;
     }
 
-    let attack_list = <div></div>;
+    let attack_list = empty_div;
     if (this.userName == this.state.player1){
         attack_list = _.map(this.state.poke1.attacks, (atk, ii) => {
-          if (atk.spl){
-            return <Button className="btn btn-warning" val={atk.name} dmg={atk.dmg} spl={atk.spl.toString()} onClick={this.clickAtk.bind(this)} p="p1" key={ii} >{atk.name}</Button>;
-          } else {
-            return <Button className="btn btn-info" val={atk.name} dmg={atk.dmg} spl={atk.spl.toString()} onClick={this.clickAtk.bind(this)} p="p1" key={ii} >{atk.name}</Button>;
-          }
+          return <AttackButton atk={atk} player="player1" clickAtk={this.clickAtk.bind(this)} key={ii} />;
         });
-        console.log(attack_list);
     }
 
     if (this.userName == this.state.player2){
         attack_list = _.map(this.state.poke2.attacks, (atk, ii) => {
-          if (atk.spl){
-            return <Button className="btn btn-warning" val={atk.name} dmg={atk.dmg} spl={atk.spl.toString()} onClick={this.clickAtk.bind(this)} p="p1" key={ii} >{atk.name}</Button>;
-          } else {
-            return <Button className="btn btn-info" val={atk.name} dmg={atk.dmg} spl={atk.spl.toString()} onClick={this.clickAtk.bind(this)} p="p1" key={ii} >{atk.name}</Button>;
-          }
+          return <AttackButton atk={atk} player="player2" clickAtk={this.clickAtk.bind(this)} key={ii} />;
         });
     }
 
+    let attack_div = <div></div>;
+    if (attack_list != empty_div) {
+      attack_div = <div className="atk-container">{attack_list}</div>;
+    }
     let p2_div = <div className="col">Waiting for Player 2 to Connect</div>;
     if (this.state.player2 != ""){
       p2_div = <div className="col">
@@ -154,22 +147,19 @@ class Battle extends React.Component {
     </div>
     <div className="row">
       <div className="col-4">
-        <div className="atk-container">
-          {attack_list}
-        </div>
+          {attack_div}
       </div>
       <div className="col">
-        <div class="space"></ div>
-        <div id="progressbar">
-          <div class="progress"></div>
-          <div class="progress-text"> </div>
-        </div>
-          <div class="centered_buttons">
-           {skill_button}
-          </ div>
         <div className="talk-bubble">
-          <p id="dialog">Waiting for {this.state.players_turn} to select  attack</p>
+          <p id="dialog">Waiting for {this.state.attacker} to select attack</p>
         </div>
+      </div>
+    </div>
+    <div className="row">
+      <div className="col">
+        <button id="toggle" value='play'>Play</button>
+         <div id="pc-dmg"></div><div id="pc-dmg-txt"></div>
+        <div className="skill-bar"><div className="mover"></div></div>
       </div>
     </div>
     </div>
@@ -177,27 +167,61 @@ class Battle extends React.Component {
   }
 }
 
-  $(document).ready(function() {
-    var counter = 0,
-    progressbar = setInterval(function() 
-    {
-        $('#progressbar .progress-text').text("Attack was " + counter + '% effective');
-        $('#progressbar .progress').css({'width':counter+'%'});
-        if (counter == 101) {
-            clearInterval(progressbar);
-            alert('Something went wrong!');
-        } else
-            counter = (++counter % 101)
-        
-    }, 1);
-    
-    $('#stop').click(function() {
-    clearInterval(progressbar);
-    });
+//returns the element for tile
+function AttackButton(props) {
+
+  let atk = props.atk;
+  let player = props.player;
+  var name = atk.name;
+  var dmg = atk.dmg;
+  var spl = atk.spl;
+
+  let style;
+
+  //decide the className and text to show depending on whether tile has been matched
+  if(spl == true){
+    style = "btn btn-warning"
+  } else {
+    style = "btn btn-info"
+  }
+
+  return <Button className={style} val={name} dmg={dmg} spl={spl.toString()} player={player} onClick={() => props.clickAtk(atk)}>{name}</Button>;
+
+}
+
+$(document).ready(function() {
+  $("#toggle").click(function() {
+    alert("HEY!");
+    // var mv = $('.mover');
+    // if($("#toggleButton").html() == "Play")
+    // {
+    //   $(this).html('Pause');
+    //   mv.addClass('tran');
+    // } else {
+    //   $("#toggleButton").html('Play');
+    //   var computedStyle = $boxTwo.css('margin-left');
+    //   mv.removeClass('tran');
+    //   mv.css('margin-left', computedStyle);
+    // }
   });
 
+});
 
-
-
-
-
+  // $(document).ready(function() {
+  //   var counter = 0,
+  //   progressbar = setInterval(function()
+  //   {
+  //       $('#progressbar .progress-text').text("Attack was " + counter + '% effective');
+  //       $('#progressbar .progress').css({'width':counter+'%'});
+  //       if (counter == 101) {
+  //           clearInterval(progressbar);
+  //           alert('Something went wrong!');
+  //       } else
+  //           counter = (++counter % 101)
+  //
+  //   }, 1);
+  //
+  //   $('#stop').click(function() {
+  //   clearInterval(progressbar);
+  //   });
+  // });

@@ -26,11 +26,14 @@
     -webkit-animation-iteration-count: infinite; /* Safari 4.0 - 8.0 */
     -webkit-animation-direction: alternate-reverse; /* Safari 4.0 - 8.0 */
     -webkit-animation-timing-function: linear;
+		-webkit-animation-play-state: paused;
     animation-name: example;
     animation-duration: 0.5s;
     animation-iteration-count: infinite;
     animation-direction: alternate-reverse;
     animation-timing-function: linear;
+		animation-play-state: paused;
+
 }
 
 /* Safari 4.0 - 8.0 */
@@ -47,7 +50,7 @@
 </style>
 
 </head>
-<body onLoad="toggleAnim()">
+<body>
 
 <p><b>Note:</b> This example does not work in Internet Explorer 9 and earlier versions.</p>
 <button onClick="toggleAnim()">Click to Start/Stop</button>

@@ -89,3 +89,57 @@
 body {
   background-color: #81E1FE;
 }
+
+.skill-bar {
+	background-color: black;
+    width: 610px;
+    border: solid;
+    border-radius: 25px;
+    position: fixed;
+}
+.mover {
+  width: 70px;
+  height: 70px;
+  /* background-image: url("https://www.pokethmon.com/images/pokeball.png"); */
+  background-color:red;
+  border: solid;
+  border-radius: 25px;
+  /* background-position: center center; */
+  padding: 20px;
+  position: relative;
+}
+
+.mover.tran {
+    width: 70px;
+    height: 70px;
+    /* background-image: url("https://www.pokethmon.com/images/pokeball.png"); */
+    background-color:red;
+    border: solid;
+    border-radius: 25px;
+    /* background-position: center center; */
+    padding: 20px;
+    position: relative;
+    -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
+    -webkit-animation-duration: 0.5s; /* Safari 4.0 - 8.0 */
+    -webkit-animation-iteration-count: infinite; /* Safari 4.0 - 8.0 */
+    -webkit-animation-direction: alternate-reverse; /* Safari 4.0 - 8.0 */
+    -webkit-animation-timing-function: linear;
+    animation-name: example;
+    animation-duration: 0.5s;
+    animation-iteration-count: infinite;
+    animation-direction: alternate-reverse;
+    animation-timing-function: linear;
+    margin-left: 50%;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes example {
+    0%   {background-color:red; left:0px; top:0px;}
+    100% {background-color:yellow; left:500px; top:0px;}
+}
+
+/* Standard syntax */
+@keyframes example {
+     0%   {background-color:red; left:0px; top:0px;}
+    100% {background-color:yellow; left:500px; top:0px;}
+}

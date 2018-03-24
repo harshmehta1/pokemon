@@ -19,7 +19,7 @@ defmodule PokemonWeb.GamesChannel do
 
   def handle_info({:after_join, game}, socket) do
     IO.inspect("AFTER_JOIN")
-    broadcast! socket, "user:joined", game
+    broadcast! socket, "state_update", game
     {:noreply, socket}
   end
 
@@ -37,6 +37,14 @@ defmodule PokemonWeb.GamesChannel do
     Pokemon.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
     {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
+  end
+
+  def handle_in("attack", params, socket) do
+    game = Game.attack(socket.assigns[:game], params)
+    send(self, {:after_join, game})
+    Pokemon.GameBackup.save(socket.assigns[:name], game)
+    socket = assign(socket, :game, game)
+    {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
   end
 
 

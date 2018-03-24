@@ -26,7 +26,7 @@ function landing_init() {
   $("#user_game").keyup(() => {
     let name = $("#user_game").val();
     $("#add").attr("href", "/game/".concat(name));
-  });  
+  });
 }
 
 function start(){
@@ -41,5 +41,47 @@ function start(){
   }
 
 }
+var interval;
+function toggleAnim(){
+  var mv = document.getElementById('mover');
+  var style = mv.style;
+  if (style.webkitAnimationPlayState === 'running') {
+    clearInterval(interval);
+    style.webkitAnimationPlayState = 'paused';
+  } else {
+    style.webkitAnimationPlayState = 'running';
+  }
+}
+
+
+function startSkill(){
+  var i = 100; //1/5th of animation-duration.
+  var val = 100; //1/5th of animation-duration.
+  var called = false;
+  interval = setInterval(increment, val);
+  var pcTxt = document.getElementById("pc-dmg");
+  var pcDmgTxt = document.getElementById("pc-dmg-txt");
+  function increment(){
+    if (called == false){
+      toggleAnim();
+      called = true;
+    }
+    pcTxt.innerHTML = i;
+    if (i == val * 5){
+      i = val;
+      pcDmgTxt.innerHTML = "Low Effect";
+    } else {
+      if (i == (val * 2) || i == (val * 4)){
+        pcDmgTxt.innerHTML = "Med Effect";
+      } else if (i == (val * 3)){
+        pcDmgTxt.innerHTML = "High Effect";
+      } else if (i == val){
+        pcDmgTxt.innerHTML = "Low Effect";
+      }
+      i = i + val;
+    }
+  }
+}
+
 
 $(start);
