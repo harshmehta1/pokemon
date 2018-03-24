@@ -14,6 +14,8 @@ defmodule Pokemon.Application do
       supervisor(PokemonWeb.Endpoint, []),
       # Start your own worker by calling: Pokemon.Worker.start_link(arg1, arg2, arg3)
       worker(Pokemon.GameBackup, []),
+      # Start Presence feature to track when a player quits
+      supervisor(PokemonWeb.Presence, []),
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

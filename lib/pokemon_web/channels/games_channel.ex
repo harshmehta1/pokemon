@@ -2,6 +2,7 @@ defmodule PokemonWeb.GamesChannel do
   use PokemonWeb, :channel
 
   alias Pokemon.Game
+  alias PokemonWeb.Presence
 
   def join("games:" <> name, params, socket) do
     userName = params["userName"]
@@ -19,7 +20,15 @@ defmodule PokemonWeb.GamesChannel do
 
   def handle_info({:after_join, game}, socket) do
     IO.inspect("AFTER_JOIN")
+<<<<<<< HEAD
     broadcast! socket, "state_update", game
+=======
+    push socket, "presence_state", Presence.list(socket)
+    {:ok, _} = Presence.track(socket, socket.assigns[:user], %{
+       online_at: inspect(System.system_time(:seconds))
+    })
+    broadcast! socket, "user:joined", game
+>>>>>>> 8ec9dac321d7ed32e85f19528feee89b8f964f9f
     {:noreply, socket}
   end
 
@@ -32,10 +41,13 @@ defmodule PokemonWeb.GamesChannel do
     {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
   end
 
-  def handle_in("clicked", %{"atkBtn" => ii}, socket) do
-    game = Game.clicked(socket.assigns[:game], ii)
+  def handle_in("clicked", %{}, socket) do
+    name = socket.assigns[:name]
+    game = Pokemon.GameBackup.load(name)
+    game = Game.clicked(game)
     Pokemon.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
+    broadcast! socket, "update", %{game: game}
     {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
   end
 
