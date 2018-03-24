@@ -40,7 +40,7 @@ defmodule Pokemon.Game do
       player2: game.player2,
       poke1: game.poke1,
       poke2: game.poke2,
-      observers: game.observers,
+      observers: [],
       players_turn: game.players_turn,
     }
   end
@@ -183,8 +183,8 @@ end
   # end
 
   # method to register clicks from UI
-  def clicked(game, selection) do
-    cond do
+  def clicked(game) do
+    cond do 
       game.players_turn == game.player1 ->
         %{ 
           player1: Map.get(game, "player1"),
@@ -195,6 +195,9 @@ end
           players_turn: Map.get(game, "players_turn"),
           ready_to_fire: true
          }
+      true ->
+        game
+        IO.inspect(game)
     end
   end
 
@@ -219,5 +222,22 @@ end
         IO.inspect(game)
     end
   end
+
+  # calc damage and energy increase of attack
+  # update for skill bar modifier
+  defp calc_damage(userName) do
+    IO.inspect(userName)
+      cond do
+        # update for player 1 attacks
+        userName == game.player1 ->
+          Map.get_and_update(poke2, :hp, poke2.hp - poke1.dmg)
+          Map.get_and_update(poke1, :energy, poke1.energy + 10)
+        # update for player 2 attacks
+        userName == game.player1 ->
+          Map.get_and_update(poke1, :hp, poke1.hp - poke2.dmg)
+          Map.get_and_update(poke2, :energy, poke2.energy + 10)
+    end
+  end
+
 
 end
