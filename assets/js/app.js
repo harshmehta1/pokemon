@@ -102,3 +102,4 @@ function startSkill(){
 
 $(start);
 
+

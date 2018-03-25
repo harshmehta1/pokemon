@@ -8,7 +8,8 @@ defmodule Pokemon.Game do
       poke1: [],
       poke2: [],
       attacker: "",
-      ready_to_fire: false
+      ready_to_fire: false,
+      game_over: false
     }
   end
 
@@ -41,6 +42,7 @@ defmodule Pokemon.Game do
       poke2: game.poke2,
       attacker: game.attacker,
       observers: [],
+      game_over: game.game_over
     }
   end
 
@@ -151,7 +153,8 @@ end
       poke2: Map.get(game, "poke2"),
       observers: [],
       attacker: Map.get(game, "attacker"),
-      ready_to_fire: Map.get(game, "ready_to_fire")
+      ready_to_fire: Map.get(game, "ready_to_fire"),
+      game_over: Map.get(game, "game_over")
     }
   end
 
@@ -178,20 +181,56 @@ end
       cond do
         game.attacker == game.player1 ->
           dmg = Map.get(atkMap, "dmg")
-          poke2hp = Map.get(game.poke2, "hp")
-          poke2hp = poke2hp - dmg
-          poke2 = Map.replace!(game.poke2, "hp", poke2hp)
-          game = Map.replace!(game, :poke2, poke2)
-          game = Map.replace!(game, :attacker, game.player2)
-          game
+          spl = Map.get(atkMap, "spl")
+          energy = Map.get(game.poke1, "energy")
+
+          if energy < 100 && spl == true do
+            game
+          else
+            energy = energy + 20
+            poke1 = Map.replace!(game.poke1, "energy", energy)
+            poke2hp = Map.get(game.poke2, "hp")
+            poke2hp = poke2hp - dmg
+            poke2 = Map.replace!(game.poke2, "hp", poke2hp)
+            game = Map.replace!(game, :poke1, poke1)
+            game = Map.replace!(game, :poke2, poke2)
+            game = Map.replace!(game, :attacker, game.player2)
+
+            if poke2hp <= 0 do
+              poke2 = Map.replace!(game.poke2, "hp", 0)
+              game = Map.replace!(game, :poke2, poke2)
+              game = Map.replace!(game, :game_over, true)
+              game
+            else 
+              game
+            end
+          end
         game.attacker == game.player2 ->
           dmg = Map.get(atkMap, "dmg")
-          poke1hp = Map.get(game.poke1, "hp")
-          poke1hp = poke1hp - dmg
-          poke1 = Map.replace!(game.poke1, "hp", poke1hp)
-          game = Map.replace!(game, :poke1, poke1)
-          game = Map.replace!(game, :attacker, game.player1)
-          game
+          spl = Map.get(atkMap, "spl")
+          energy = Map.get(game.poke2, "energy")
+
+          if energy < 100 && spl == true do
+            game
+          else
+            energy = energy + 20
+            poke2 = Map.replace!(game.poke2, "energy", energy)
+            poke1hp = Map.get(game.poke1, "hp")
+            poke1hp = poke1hp - dmg
+            poke1 = Map.replace!(game.poke1, "hp", poke1hp)
+            game = Map.replace!(game, :poke1, poke1)
+            game = Map.replace!(game, :poke2, poke2)
+            game = Map.replace!(game, :attacker, game.player1)
+
+            if poke1hp <= 0 do
+              poke1 = Map.replace!(game.poke1, "hp", 0)
+              game = Map.replace!(game, :poke1, poke1)
+              game = Map.replace!(game, :game_over, true)
+              game
+            else 
+              game
+            end
+          end
         true ->
           game
       end
@@ -219,21 +258,6 @@ end
     end
   end
 
-  # calc damage and energy increase of attack
-  # update for skill bar modifier
-  defp calc_damage(userName) do
-    IO.inspect(userName)
-      cond do
-        # update for player 1 attacks
-        userName == game.player1 ->
-          Map.get_and_update(poke2, :hp, poke2.hp - poke1.dmg)
-          Map.get_and_update(poke1, :energy, poke1.energy + 10)
-        # update for player 2 attacks
-        userName == game.player1 ->
-          Map.get_and_update(poke1, :hp, poke1.hp - poke2.dmg)
-          Map.get_and_update(poke2, :energy, poke2.energy + 10)
-    end
-  end
 
 
 end
