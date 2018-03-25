@@ -53,6 +53,10 @@ class Battle extends React.Component {
 
 
   render(){
+    let winner = null;
+    if (this.state.poke2.hp < this.state.poke1.hp) {
+      winner = this.state.player1;
+    }
 
     if (this.state.game_over == true) {
     // Attribution to: https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_modal_show_hide&stacked=h
@@ -64,7 +68,7 @@ class Battle extends React.Component {
                 <h2 class="modal-title">Game over!</h2>
               </div>
               <div class="modal-body">
-                <p> wins the game</p>
+                <p>{winner} wins the game</p>
               </div>
               <div class="modal-footer">
                 <Button type="button" class="btn btn-secondary" onClick={this.restart.bind(this)}>Play Again</Button>
