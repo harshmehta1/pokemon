@@ -20,15 +20,12 @@ defmodule PokemonWeb.GamesChannel do
 
   def handle_info({:after_join, game}, socket) do
     IO.inspect("AFTER_JOIN")
-<<<<<<< HEAD
     broadcast! socket, "state_update", game
-=======
     push socket, "presence_state", Presence.list(socket)
     {:ok, _} = Presence.track(socket, socket.assigns[:user], %{
        online_at: inspect(System.system_time(:seconds))
     })
     broadcast! socket, "user:joined", game
->>>>>>> 8ec9dac321d7ed32e85f19528feee89b8f964f9f
     {:noreply, socket}
   end
 

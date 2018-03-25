@@ -39,12 +39,8 @@ defmodule Pokemon.Game do
       player2: game.player2,
       poke1: game.poke1,
       poke2: game.poke2,
-<<<<<<< HEAD
       attacker: game.attacker,
-=======
       observers: [],
-      players_turn: game.players_turn,
->>>>>>> 8ec9dac321d7ed32e85f19528feee89b8f964f9f
     }
   end
 
@@ -160,17 +156,10 @@ end
   end
 
   # method to register clicks from UI
-<<<<<<< HEAD
-  def clicked(game, selection) do
-    cond do
-      game.attacker == game.player1 ->
-        %{
-=======
   def clicked(game) do
     cond do 
-      game.players_turn == game.player1 ->
+      game.attacker == game.player1 ->
         %{ 
->>>>>>> 8ec9dac321d7ed32e85f19528feee89b8f964f9f
           player1: Map.get(game, "player1"),
           player2: Map.get(game, "player2"),
           poke1: Map.get(game, "poke1"),
