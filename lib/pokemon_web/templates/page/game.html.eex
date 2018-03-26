@@ -1,4 +1,6 @@
-<h1 align="center">Pokemon Gold. Channel: <%= @game %>. User: <%= @userName %>.</h1>
+<div id="padit"></div>
+<p class="userdetails">Channel: <%= @game %>.<br>User: <%= @userName %>.</p>
+<img src="/images/poke-logo.png" class="logo" style="width:15%"><br>
 <script>
   window.gameName = "<%= @game %>";
   window.userName = "<%= @userName %>";
@@ -6,5 +8,3 @@
 <div id="game">
   Loading...
 </div>
-
-

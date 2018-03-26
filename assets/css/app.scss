@@ -42,39 +42,47 @@
   border: solid;
   border-radius: 25px;
   padding: 20px;
-  margin-top:30px;
+  margin-top:10px;
 }
 
 .progress-bar {
-    border: solid;
+    // border: solid;
     font-weight: bold;
     font-style: italic;
 }
 
-#progressbar .progress {
-  background-color: green;
-  border-radius: 4px;
-  height: 100%;
-  border: solid;
-
+.progress {
+  height: 25px;
+  border-radius: 25px;
 }
+//
+// #progressbar .progress {
+//   background-color: green;
+//   border-radius: 4px;
+//   height: 100%;
+//   border: solid;
+//
+// }
 
+//
+// #progressbar {
+//   width: 100%;
+//   height: 50px;
+//   border-radius: 4px;
+//   background-color: lightgrey;
+//   padding: 10px;
+// }
+//
+// #progressbar .progress-text {
+//     position:absolute;
+//     z-index:2;
+//     right:0;
+//     padding: 10px;
+// }
 
-#progressbar {
-  width: 100%;
-  height: 50px;
-  border-radius: 4px;
-  background-color: lightgrey;
-  padding: 10px;
+#attack-row {
+  margin-top: 40px;
 }
-
-#progressbar .progress-text {
-    position:absolute;
-    z-index:2;
-    right:0;
-    padding: 10px;
-}
-
 
 .atk-container {
   background-color: rgba(255, 255, 255, 0.8);
@@ -82,7 +90,6 @@
   padding: 20px;
   border-radius: 25px;
   display: grid;
-  margin-top:30px;
   grid-template-columns: minmax(50px, 150px) minmax(50px, 150px);
   grid-template-rows: minmax(30px, 50px) minmax(30px, 50px);
   grid-gap: 20px;
@@ -101,17 +108,26 @@ body {
 }
 
 .skill-bar {
-	background-color: black;
+	background-color: #F5F5F5;
     width: 700px;
     height: 60px;
     border: solid;
     border-radius: 25px;
-    // position: fixed;
+}
+
+#testrow {
+  border: solid;
+}
+
+#pc-dmg-txt {
+    font-weight: bolder;
+    color: black;
 }
 
 .mover {
+    margin-top:1.3px;
     width: 70px;
-    height: 55px;
+    height: 53px;
     /* background-image: url("https://www.pokethmon.com/images/pokeball.png"); */
     background-color:red;
     // border: solid;
@@ -147,18 +163,17 @@ body {
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes example {
     0%   {background-color:red; left:0px; top:0px;}
-    100% {background-color:yellow; left:623px; top:0px;}
+    100% {background-color:green; left:623px; top:0px;}
 }
 
 /* Standard syntax */
 @keyframes example {
      0%   {background-color:red; left:0px; top:0px;}
-    100% {background-color:yellow; left:623px; top:0px;}
+    100% {background-color:green; left:623px; top:0px;}
 }
 
 #p2hp {
   width: 100%;
-  border: solid;
 }
 
 #p1hp {
@@ -201,6 +216,28 @@ body {
 
 }
 
+#skilltags{
+    margin-bottom: -2%;
+    // width: 700px;
+    margin-top: -3%;
+    text-align: center;
+    color: black;
+    font-weight: bolder;
+    // -webkit-text-stroke: 1px black;
+}
+
+.userdetails {
+  position: absolute;
+  top: 0px;
+  right: 18%;
+  text-align: right;
+  margin-top:10px;
+}
+
+#padit {
+    margin-top: 10px;
+}
+
 #pokeball2{
   float: right;
 }
@@ -226,8 +263,4 @@ body {
 @keyframes revpoketran {
      0%   {left:650px; top:0px;}
     100% {left:0px; top:0px;}
-}
-
-.container {
-  border: solid;
 }

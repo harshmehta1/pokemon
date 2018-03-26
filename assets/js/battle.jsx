@@ -160,25 +160,25 @@ class Battle extends React.Component {
     var val = 25; //1/20th of animation-duration.
     var called = false;
     this.interval = setInterval(increment, val);
-    var pcTxt = document.getElementById("pc-dmg");
-    var pcDmgTxt = document.getElementById("pc-dmg-txt");
+    // var pcTxt = document.getElementById("pc-dmg");
+    // var pcDmgTxt = document.getElementById("pc-dmg-txt");
     var here = this;
     function increment(){
-      pcTxt.innerHTML = i;
+      // pcTxt.innerHTML = i;
       if (i == val * 20){
         i = val;
-        pcDmgTxt.innerHTML = "Low Effect";
+        // pcDmgTxt.innerHTML = "WEAK";
         here.effect = "low";
       } else {
         if (i == (val * 5) || i == (val * 6) || i == (val * 7) || i == (val * 8)
       || i == (val * 13) || i == (val * 14) || i == (val * 15) || i == (val * 16)){
-          pcDmgTxt.innerHTML = "Med Effect";
+          // pcDmgTxt.innerHTML = "MEDIUM";
           here.effect = "med";
         } else if (i == (val * 9) || i == (val * 10) || i == (val * 11) || i == (val * 12)){
-          pcDmgTxt.innerHTML = "High Effect";
+          // pcDmgTxt.innerHTML = "CRITICAL";
           here.effect = "high";
         } else if (i == val || i == (val * 2) || i == (val * 3) || i == (val * 4) || i == (val * 17) || i == (val * 18) || i == (val * 19) || i == (val * 20)){
-          pcDmgTxt.innerHTML = "Low Effect";
+          // pcDmgTxt.innerHTML = "WEAK";
           here.effect = "low";
         }
         i = i + val;
@@ -265,9 +265,11 @@ class Battle extends React.Component {
             <p>Health</p>
           </div>
           <div className="col-9">
-            <div className="progress-bar bg-success" role="progressbar" aria-valuenow={this.state.poke2.hp} aria-valuemin="0" aria-valuemax="100" id="p2hp">
-              {this.state.poke2.hp}
-            </div>
+            <div className="progress">
+              <div className="progress-bar bg-success" role="progressbar" aria-valuenow={this.state.poke2.hp} aria-valuemin="0" aria-valuemax="100" id="p2hp">
+                {this.state.poke2.hp}
+              </div>
+              </div>
           </div>
         </div>
         <div className="row">
@@ -275,14 +277,16 @@ class Battle extends React.Component {
             <p>Energy</p>
           </div>
           <div className="col-9">
-            <div className="progress-bar bg-warning" role="progressbar" aria-valuenow={this.state.poke2.energy} aria-valuemin="0" aria-valuemax="100" id="p2en">
-              {this.state.poke2.energy}
+            <div className="progress">
+              <div className="progress-bar bg-warning" role="progressbar" aria-valuenow={this.state.poke2.energy} aria-valuemin="0" aria-valuemax="100" id="p2en">
+                {this.state.poke2.energy}
+              </div>
             </div>
           </div>
         </div>
         <div className="row">
           <div className="col">
-                <p>Trainer {this.state.player2} has chosen {this.state.poke2.name}</p>
+                <p>Trainer <b>{this.state.player2}</b> has chosen <b><i>{this.state.poke2.name}</i></b></p>
           </div>
         </div>
         <div className="row">
@@ -311,9 +315,11 @@ class Battle extends React.Component {
               <p>Health</p>
             </div>
             <div className="col-9">
-              <div className="progress-bar bg-success" role="progressbar" aria-valuenow={this.state.poke1.hp} aria-valuemin="0" aria-valuemax="100" id="p1hp">
-                {this.state.poke1.hp}
-              </div>
+              <div className="progress">
+                  <div className="progress-bar bg-success" role="progressbar" aria-valuenow={this.state.poke1.hp} aria-valuemin="0" aria-valuemax="100" id="p1hp">
+                    {this.state.poke1.hp}
+                  </div>
+                </div>
             </div>
           </div>
           <div className="row">
@@ -321,8 +327,10 @@ class Battle extends React.Component {
               <p>Energy</p>
             </div>
             <div className="col-9">
-              <div className="progress-bar bg-warning" role="progressbar" aria-valuenow={this.state.poke1.energy} aria-valuemin="0" aria-valuemax="100" id="p1en">
-                {this.state.poke1.energy}
+              <div className="progress">
+                <div className="progress-bar bg-warning" role="progressbar" aria-valuenow={this.state.poke1.energy} aria-valuemin="0" aria-valuemax="100" id="p1en">
+                  {this.state.poke1.energy}
+                </div>
               </div>
             </div>
           </div>
@@ -330,7 +338,7 @@ class Battle extends React.Component {
             <div className="col">
               <div className="row">
                 <div className="col-8">
-                  <p>Trainer {this.state.player1} has chosen {this.state.poke1.name}</p>
+                  <p>Trainer <b>{this.state.player1}</b> has chosen <b><i>{this.state.poke1.name}</i></b></p>
                 </div>
               </div>
             </div>
@@ -346,19 +354,37 @@ class Battle extends React.Component {
         </div>
         {p2_div}
     </div>
-    <div className="row">
+    <div className="row" id="attack-row">
       <div className="col-4">
           {attack_div}
       </div>
       <div className="col-8">
-        <div className="row h-50">
-          <div className="col-12 h-50">
-             <div id="pc-dmg"></div><div id="pc-dmg-txt"></div>
-            <div className="skill-bar"><div className="mover"></div></div>
+        <div className="row">
+          <div className="col">
+            <div className="row" id="skilltags">
+              <div className="col-2">
+                <p id="left">LOW</p>
+              </div>
+              <div className="col-3">
+                <p>MEDIUM</p>
+              </div>
+              <div className="col-2">
+                <p id="middle">HIGH</p>
+              </div>
+              <div className="col-3">
+                <p>MEDIUM</p>
+              </div>
+              <div className="col-2">
+                <p id="right">LOW</p>
+              </div>
+            </div>
+            <div className="skill-bar">
+            <div className="mover"></div>
+            </div>
           </div>
         </div>
-        <div className="row h-50">
-          <div className="col-12">
+        <div className="row">
+          <div className="col">
             <div className="talk-bubble">
               <p id="dialog">{this.state.dialogue}</p>
             </div>
