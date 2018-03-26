@@ -44,7 +44,8 @@ class Battle extends React.Component {
     var _ = this;
     $(document).keypress(function(e) {
       if(_.currAtk != null && _.atkClicked != false){
-        if (e.keyCode == 32){
+        console.log("KEY PRESSED")
+        if (e.charCode == 32){
           //spacebar pressed
           _.handleToggle();
         }
@@ -68,7 +69,7 @@ class Battle extends React.Component {
     console.log("attacker pressed")
     if(this.state.attacker == this.userName && this.atkClicked == false){
       console.log("INSIDE")
-      if (atkBtn.spl == "true"){
+      if (atkBtn.spl == true){
         if (this.state.attacker == this.state.player1) {
           if (this.state.poke1.energy == 100){
             this.atkHandler(atkBtn);
