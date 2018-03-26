@@ -31,6 +31,12 @@ class Battle extends React.Component {
     });
   }
 
+  componentDidMount(){
+    $('.mover').css("-webkit-animation-play-state", "paused");
+    window.onKeyPress(this.keyHandler);
+
+
+  }
   //gets view from the server and sets the state of the ga  me
   gotView(view){
     this.setState(view.game);
@@ -38,12 +44,49 @@ class Battle extends React.Component {
 
   clickAtk(atkBtn){
     if(this.state.attacker == this.userName){
+      this.handleToggle();
       this.channel.push("attack", atkBtn)
           .receive("ok", this.gotView.bind(this));
     }
   }
 
 
+  handleToggle(){
+    // var mv = $('.mover');
+    // if($("#toggle").html() == "Play")
+    // {
+    //   $("#toggle").html('Pause');
+    //   mv.addClass('tran');
+    // } else {
+    //   $("#toggle").html('Play');
+    //   var computedStyle = mv.css('margin-left');
+    //   mv.removeClass('tran');
+    //   mv.css('margin-left', computedStyle);
+    // }
+    // var mv = document.getElementById('mover');
+    // var style = mv.style;
+    var style = $('.mover').css("-webkit-animation-play-state");
+    if(style == "paused") {
+      $('.mover').css("-webkit-animation-play-state", "running");
+    } else {
+      $('.mover').css("-webkit-animation-play-state", "paused");
+    }
+    // setTimeout(function() {
+    //   mv.css("-webkit-animation-play-state", "paused");
+    // }, 1000);
+    // if (style.webkitAnimationPlayState === 'running') {
+    //   clearInterval(interval);
+    //   style.webkitAnimationPlayState = 'paused';
+    // } else {
+    //   style.webkitAnimationPlayState = 'running';
+    // }
+  }
+
+  keyHandler(e){
+    // if (e == 'Enter'){
+      alert("ENTER!");
+    // }
+  }
 
 
   render(){
@@ -109,7 +152,7 @@ class Battle extends React.Component {
 
 
     return (
-    <div className="container">
+    <div className="container" onKeyPress={this.keyHandler}>
       <div className="row">
         <div className="col">
           <div className="row">
@@ -157,7 +200,7 @@ class Battle extends React.Component {
     </div>
     <div className="row">
       <div className="col">
-        <button id="toggle" value='play'>Play</button>
+        <button id="toggle" onClick={this.handleToggle.bind(this)} value='play'>Play</button>
          <div id="pc-dmg"></div><div id="pc-dmg-txt"></div>
         <div className="skill-bar"><div className="mover"></div></div>
       </div>
@@ -189,24 +232,9 @@ function AttackButton(props) {
 
 }
 
-$(document).ready(function() {
-  $("#toggle").click(function() {
-    alert("HEY!");
-    // var mv = $('.mover');
-    // if($("#toggleButton").html() == "Play")
-    // {
-    //   $(this).html('Pause');
-    //   mv.addClass('tran');
-    // } else {
-    //   $("#toggleButton").html('Play');
-    //   var computedStyle = $boxTwo.css('margin-left');
-    //   mv.removeClass('tran');
-    //   mv.css('margin-left', computedStyle);
-    // }
-  });
-
+$(document).keypress(function() {
+  this.handleToggle();
 });
-
   // $(document).ready(function() {
   //   var counter = 0,
   //   progressbar = setInterval(function()

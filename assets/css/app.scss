@@ -92,24 +92,25 @@ body {
 
 .skill-bar {
 	background-color: black;
-    width: 610px;
+    width: 575px;
     border: solid;
     border-radius: 25px;
     position: fixed;
 }
-.mover {
-  width: 70px;
-  height: 70px;
-  /* background-image: url("https://www.pokethmon.com/images/pokeball.png"); */
-  background-color:red;
-  border: solid;
-  border-radius: 25px;
-  /* background-position: center center; */
-  padding: 20px;
-  position: relative;
-}
+// .mover {
+//   width: 70px;
+//   height: 70px;
+//   /* background-image: url("https://www.pokethmon.com/images/pokeball.png"); */
+//   background-color:red;
+//   border: solid;
+//   border-radius: 25px;
+//   /* background-position: center center; */
+//   padding: 20px;
+//   position: relative;
+//   // margin-left: 50%;
+// }
 
-.mover.tran {
+.mover {
     width: 70px;
     height: 70px;
     /* background-image: url("https://www.pokethmon.com/images/pokeball.png"); */
@@ -129,7 +130,7 @@ body {
     animation-iteration-count: infinite;
     animation-direction: alternate-reverse;
     animation-timing-function: linear;
-    margin-left: 50%;
+    // margin-left: 50%;
 }
 
 /* Safari 4.0 - 8.0 */
