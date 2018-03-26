@@ -45,10 +45,18 @@
   margin-top:30px;
 }
 
+.progress-bar {
+    border: solid;
+    font-weight: bold;
+    font-style: italic;
+}
+
 #progressbar .progress {
   background-color: green;
   border-radius: 4px;
   height: 100%;
+  border: solid;
+
 }
 
 
@@ -69,7 +77,7 @@
 
 
 .atk-container {
-  background-color: white;
+  background-color: rgba(255, 255, 255, 0.8);
   float: left;
   padding: 20px;
   border-radius: 25px;
@@ -88,19 +96,22 @@
 
 body {
   background-color: #81E1FE;
+  background-image: url("/images/poke-background.png");
+  background-size: cover;
 }
 
 .skill-bar {
 	background-color: black;
-    width: 575px;
+    width: 700px;
+    height: 60px;
     border: solid;
     border-radius: 25px;
-    position: fixed;
+    // position: fixed;
 }
 
 .mover {
     width: 70px;
-    height: 70px;
+    height: 55px;
     /* background-image: url("https://www.pokethmon.com/images/pokeball.png"); */
     background-color:red;
     // border: solid;
@@ -130,18 +141,93 @@ body {
   border-radius: 25px;
   /* background-position: center center; */
   padding: 20px;
-
   position: relative;
 }
 
 /* Safari 4.0 - 8.0 */
 @-webkit-keyframes example {
     0%   {background-color:red; left:0px; top:0px;}
-    100% {background-color:yellow; left:500px; top:0px;}
+    100% {background-color:yellow; left:623px; top:0px;}
 }
 
 /* Standard syntax */
 @keyframes example {
      0%   {background-color:red; left:0px; top:0px;}
-    100% {background-color:yellow; left:500px; top:0px;}
+    100% {background-color:yellow; left:623px; top:0px;}
+}
+
+#p2hp {
+  width: 100%;
+  border: solid;
+}
+
+#p1hp {
+  width: 100%;
+}
+
+#p1en, #p2en {
+    width: 5%;
+}
+
+#poke1img {
+  -webkit-transform: scaleX(-1);
+  transform: scaleX(-1);
+  float: left;
+}
+
+#poke2img {
+  float: right;
+  margin-right: 40px;
+}
+.poke-img {
+}
+
+// #pokeball {
+//   position: relative;
+//   margin-left: -5%;
+//   -webkit-animation-name: poketran; /* Safari 4.0 - 8.0 */
+//   -webkit-animation-duration: 0.7s; /* Safari 4.0 - 8.0 */
+//   -webkit-animation-iteration-count: 1; /* Safari 4.0 - 8.0 */
+//   // -webkit-animation-direction: alternate-reverse; /* Safari 4.0 - 8.0 */
+//   -webkit-animation-timing-function: linear;
+//   animation-name: poketran;
+//   animation-duration: 0.7s;
+//   animation-iteration-count: 1;
+//   // animation-direction: alternate-reverse;
+//   animation-timing-function: linear;
+// }
+
+#pokeball1{
+
+}
+
+#pokeball2{
+  float: right;
+}
+
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes poketran {
+    0%   {left:0px; top:0px;}
+    100% {left:650px; top:0px;}
+}
+
+/* Standard syntax */
+@keyframes poketran {
+     0%   {left:0px; top:0px;}
+    100% {left:650px; top:0px;}
+}
+/* Safari 4.0 - 8.0 */
+@-webkit-keyframes revpoketran {
+    0%   {left:650px; top:0px;}
+    100% {left:0px; top:0px;}
+}
+
+/* Standard syntax */
+@keyframes revpoketran {
+     0%   {left:650px; top:0px;}
+    100% {left:0px; top:0px;}
+}
+
+.container {
+  border: solid;
 }

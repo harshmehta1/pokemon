@@ -9,7 +9,8 @@ defmodule Pokemon.Game do
       poke2: [],
       attacker: "",
       ready_to_fire: false,
-      game_over: false
+      game_over: false,
+      dialogue: ""
     }
   end
 
@@ -42,13 +43,14 @@ defmodule Pokemon.Game do
       poke2: game.poke2,
       attacker: game.attacker,
       observers: [],
-      game_over: game.game_over
+      game_over: game.game_over,
+      dialogue: game.dialogue
     }
   end
 
 def getPokeList() do
   [
-  %{:name => "Pikachu", :hp => 100, :energy => 0,
+  %{:name => "Pikachu", :hp => 100, :energy => 5,
       :attacks => [%{:name => "Quick Attack",
                      :dmg => 10,
                      :spl => false},
@@ -64,7 +66,7 @@ def getPokeList() do
      :type => "Electric",
      :weakness => "Grass",
      :image => "/images/pikachu.png"},
- %{:name => "Charmander", :hp => 100, :energy => 0,
+ %{:name => "Charmander", :hp => 100, :energy => 5,
     :attacks => [%{:name => "Scratch",
                     :dmg => 10,
                     :spl => false},
@@ -80,7 +82,7 @@ def getPokeList() do
     :type => "Fire",
     :weakness => "Water",
     :image => "/images/charmander.png"},
- %{:name => "Squirtle", :hp => 100, :energy => 0,
+ %{:name => "Squirtle", :hp => 100, :energy => 5,
  :attacks => [%{:name => "Tail Whip",
                 :dmg => 10,
                 :spl => false},
@@ -96,7 +98,7 @@ def getPokeList() do
      :type => "Water",
      :weakness => "Electric",
      :image => "/images/squirtle.png"},
- %{:name => "Bulbasaur", :hp => 100, :energy => 0,
+ %{:name => "Bulbasaur", :hp => 100, :energy => 5,
  :attacks => [%{:name => "Tackle",
                 :dmg => 10,
                 :spl => false},
@@ -154,7 +156,8 @@ end
       observers: [],
       attacker: Map.get(game, "attacker"),
       ready_to_fire: Map.get(game, "ready_to_fire"),
-      game_over: Map.get(game, "game_over")
+      game_over: Map.get(game, "game_over"),
+      dialogue: Map.get(game, "dialogue")
     }
   end
 
@@ -178,6 +181,8 @@ end
   end
 
   def attack(game, atkMap) do
+    dialogue = Map.get(atkMap, "dialogue")
+    game = Map.replace!(game, :dialogue, dialogue)
     dmgFactor = 1;
     effect = Map.get(atkMap, "effect")
     cond do
@@ -196,10 +201,6 @@ end
           dmg = Map.get(atkMap, "dmg")
           spl = Map.get(atkMap, "spl")
           energy = Map.get(game.poke1, "energy")
-
-          if energy < 100 && spl == true do
-            game
-          else
             energy = energy + 20
             poke1 = Map.replace!(game.poke1, "energy", energy)
             poke2hp = Map.get(game.poke2, "hp")
@@ -217,15 +218,10 @@ end
             else
               game
             end
-          end
         game.attacker == game.player2 ->
           dmg = Map.get(atkMap, "dmg")
           spl = Map.get(atkMap, "spl")
           energy = Map.get(game.poke2, "energy")
-
-          if energy < 100 && spl == true do
-            game
-          else
             energy = energy + 20
             poke2 = Map.replace!(game.poke2, "energy", energy)
             poke1hp = Map.get(game.poke1, "hp")
@@ -243,7 +239,6 @@ end
             else
               game
             end
-          end
         true ->
           game
       end

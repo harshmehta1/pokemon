@@ -20,12 +20,14 @@ class Battle extends React.Component {
       attacker: "",
       ready_to_fire: false,
       game_over: false,
+      dialogue: "",
     };
     this.interval;
     this.effect = "low";
     this.currAtk = null;
     this.atkClicked = false;
     this.skillVal = 25;
+    this.dialogueSet = false;
 
     this.channel.join()
       .receive("ok", this.gotView.bind(this))
@@ -63,20 +65,64 @@ class Battle extends React.Component {
   }
 
   clickAtk(atkBtn){
+    console.log("attacker pressed")
     if(this.state.attacker == this.userName && this.atkClicked == false){
-      this.currAtk = atkBtn;
-      this.atkClicked = true;
-      this.handleToggle();
+      console.log("INSIDE")
+      if (atkBtn.spl == "true"){
+        if (this.state.attacker == this.state.player1) {
+          if (this.state.poke1.energy == 100){
+            this.atkHandler(atkBtn);
+          } else {
+            alert("Special Abilities can only be used when ENERGY is 100!");
+          }
+        } else {
+          if (this.state.poke2.energy == 100){
+            this.atkHandler(atkBtn);
+          } else {
+            alert("Special Abilities can only be used when ENERGY is 100!");
+          }
+        }
+      } else {
+        this.atkHandler(atkBtn);
+      }
     }
+  }
+
+  atkHandler(atkBtn){
+    this.currAtk = atkBtn;
+    this.atkClicked = true;
+    this.handleToggle();
   }
 
   pushAtk(){
     console.log("attacked!")
-    var atk = {dmg: this.currAtk.dmg, name: this.currAtk.name, spl: this.currAtk.spl, effect: this.effect}
+    var dmgWeight;
+    var effectDialogue;
+    if (this.effect == "low"){
+      effectDialogue = ",but, it couldn't connect!";
+      dmgWeight = 0.5;
+    } else if (this.effect == "med"){
+      dmgWeight = 1;
+      effectDialogue = "and, it was EFFECTIVE!";
+    } else {
+      dmgWeight = 1.5;
+      effectDialogue = "and, it was SUPER EFFECTIVE!";
+    }
+    var finDmg = this.currAtk.dmg * dmgWeight;
+    console.log(this.state.attacker)
+    console.log(this.state.player1)
+    this.dialogueSet = true;
+    if (this.state.attacker == this.state.player1){
+        this.state.dialogue = this.state.poke1.name + " used " + this.currAtk.name +" "+ effectDialogue + " It caused "+this.state.poke2.name+" a loss of "+finDmg+"HP!";
+    } else {
+        this.state.dialogue = this.state.poke2.name + " used " + this.currAtk.name +" "+ effectDialogue + " It caused "+this.state.poke1.name+" a loss of "+finDmg+"HP!";
+    }
+    console.log(this.state.dialogue)
+    var atk = {dmg: this.currAtk.dmg, name: this.currAtk.name, spl: this.currAtk.spl, effect: this.effect, dialogue: this.state.dialogue}
     this.channel.push("attack", atk)
         .receive("ok", this.gotView.bind(this));
-
     this.currAtk = null;
+
     setTimeout(function(){
       $('.mover').css("webkitAnimation", "none");
     }, 1000);
@@ -88,6 +134,11 @@ class Battle extends React.Component {
     // $('.mover').css("-webkit-animation-play-state", "paused");
     this.skillVal = 25;
     this.atkClicked = false;
+    var context = this;
+    setTimeout(function(){
+      context.dialogueSet = false;
+      context.state.dialogue = "Waiting for " + context.state.attacker + " to attack";
+    }, 3000);
 
   }
 
@@ -138,6 +189,24 @@ class Battle extends React.Component {
 
 
   render(){
+
+    if (this.dialogueSet == false){
+      this.state.dialogue = "Waiting for " + this.state.attacker + " to attack";
+    }
+
+    let pokeball_p1 = <div></div>;
+    let pokeball_p2 = <div></div>;
+
+    if (this.state.attacker == this.state.player1){
+      pokeball_p1 =   <div className="col" id="poke-turn">
+                        <img src="/images/pokeball.png" width="15%" id="pokeball1"/>
+                      </div>;
+    } else {
+      pokeball_p2 =   <div className="col" id="poke-turn">
+                        <img src="/images/pokeball.png" width="15%" id="pokeball2"/>
+                      </div>;
+    }
+
     let winner = null;
     if (this.state.poke2.hp < this.state.poke1.hp) {
       winner = this.state.player1;
@@ -146,17 +215,17 @@ class Battle extends React.Component {
     if (this.state.game_over == true) {
     // Attribution to: https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_modal_show_hide&stacked=h
       return (
-        <div class="gameOver" tabindex="-1" id="gameOver" role="dialog">
-          <div class="modal-dialog" role="document">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h2 class="modal-title">Game over!</h2>
+        <div className="gameOver" tabIndex="-1" id="gameOver" role="dialog">
+          <div className="modal-dialog" role="document">
+            <div className="modal-content">
+              <div className="modal-header">
+                <h2 className="modal-title">Game over!</h2>
               </div>
-              <div class="modal-body">
+              <div className="modal-body">
                 <p>{winner} wins the game</p>
               </div>
-              <div class="modal-footer">
-                <Button type="button" class="btn btn-secondary" onClick={this.restart.bind(this)}>Play Again</Button>
+              <div className="modal-footer">
+                <Button type="button" className="btn btn-secondary" onClick={this.restart.bind(this)}>Play Again</Button>
               </div>
             </div>
           </div>
@@ -168,6 +237,8 @@ class Battle extends React.Component {
     if (this.userName == this.state.attacker && this.state.ready_to_fire == true) {
       skill_button = <Button id="stop">Fire! </Button>;
     }
+
+
 
     let attack_list = empty_div;
     if (this.userName == this.state.player1){
@@ -211,20 +282,28 @@ class Battle extends React.Component {
         </div>
         <div className="row">
           <div className="col">
-            <p>Trainer {this.state.player2} has chosen {this.state.poke2.name}</p>
+                <p>Trainer {this.state.player2} has chosen {this.state.poke2.name}</p>
           </div>
         </div>
         <div className="row">
           <div className="col">
-            <img src={this.state.poke2.image} height="300px" className="poke-img"/>
+            {pokeball_p2}
+          </div>
+          <div className="col">
+            <img src={this.state.poke2.image} height="300px" className="poke-img" id="poke2img"/>
           </div>
         </div>
       </div>;
+    } else {
+      this.state.dialogue = "Waiting for Player 2 to Connect";
     }
-
+    $('#p1hp').css("width", this.state.poke1.hp+"%");
+    $('#p2hp').css("width", this.state.poke2.hp+"%");
+    $('#p1en').css("width", this.state.poke1.energy+"%");
+    $('#p2en').css("width", this.state.poke2.energy+"%");
 
     return (
-    <div className="container">
+    <div className="container" id="battleground">
       <div className="row">
         <div className="col">
           <div className="row">
@@ -249,12 +328,19 @@ class Battle extends React.Component {
           </div>
           <div className="row">
             <div className="col">
-              <p>Trainer {this.state.player1} has chosen {this.state.poke1.name}</p>
+              <div className="row">
+                <div className="col-8">
+                  <p>Trainer {this.state.player1} has chosen {this.state.poke1.name}</p>
+                </div>
+              </div>
             </div>
           </div>
           <div className="row">
+            <div className="col-6">
+              <img src={this.state.poke1.image} height="300px" className="poke-img" id="poke1img"/>
+            </div>
             <div className="col">
-              <img src={this.state.poke1.image} height="300px" className="poke-img"/>
+              {pokeball_p1}
             </div>
           </div>
         </div>
@@ -274,7 +360,7 @@ class Battle extends React.Component {
         <div className="row h-50">
           <div className="col-12">
             <div className="talk-bubble">
-              <p id="dialog">Waiting for {this.state.attacker} to select attack</p>
+              <p id="dialog">{this.state.dialogue}</p>
             </div>
             </div>
         </div>
