@@ -21,6 +21,11 @@ class Battle extends React.Component {
       ready_to_fire: false,
       game_over: false,
     };
+    this.interval;
+    this.effect = "low";
+    this.currAtk = null;
+    this.atkClicked = false;
+    this.skillVal = 25;
 
     this.channel.join()
       .receive("ok", this.gotView.bind(this))
@@ -34,8 +39,15 @@ class Battle extends React.Component {
 
   componentDidMount(){
     $('.mover').css("-webkit-animation-play-state", "paused");
-    window.onKeyPress(this.keyHandler);
-
+    var _ = this;
+    $(document).keypress(function(e) {
+      if(_.currAtk != null && _.atkClicked != false){
+        if (e.keyCode == 32){
+          //spacebar pressed
+          _.handleToggle();
+        }
+      }
+    });
 
   }
   //gets view from the server and sets the state of the ga  me
@@ -51,49 +63,77 @@ class Battle extends React.Component {
   }
 
   clickAtk(atkBtn){
-    if(this.state.attacker == this.userName){
+    if(this.state.attacker == this.userName && this.atkClicked == false){
+      this.currAtk = atkBtn;
+      this.atkClicked = true;
       this.handleToggle();
-      this.channel.push("attack", atkBtn)
-          .receive("ok", this.gotView.bind(this));
     }
   }
 
+  pushAtk(){
+    console.log("attacked!")
+    var atk = {dmg: this.currAtk.dmg, name: this.currAtk.name, spl: this.currAtk.spl, effect: this.effect}
+    this.channel.push("attack", atk)
+        .receive("ok", this.gotView.bind(this));
+
+    this.currAtk = null;
+    setTimeout(function(){
+      $('.mover').css("webkitAnimation", "none");
+    }, 1000);
+
+    setTimeout(function(){
+      $('.mover').css("webkitAnimation", '');
+      $('.mover').css("-webkit-animation-play-state", "paused");
+    }, 2000);
+    // $('.mover').css("-webkit-animation-play-state", "paused");
+    this.skillVal = 25;
+    this.atkClicked = false;
+
+  }
 
   handleToggle(){
-    // var mv = $('.mover');
-    // if($("#toggle").html() == "Play")
-    // {
-    //   $("#toggle").html('Pause');
-    //   mv.addClass('tran');
-    // } else {
-    //   $("#toggle").html('Play');
-    //   var computedStyle = mv.css('margin-left');
-    //   mv.removeClass('tran');
-    //   mv.css('margin-left', computedStyle);
-    // }
-    // var mv = document.getElementById('mover');
-    // var style = mv.style;
     var style = $('.mover').css("-webkit-animation-play-state");
+    console.log(style)
     if(style == "paused") {
+      this.skillScoreCounter();
       $('.mover').css("-webkit-animation-play-state", "running");
     } else {
+      clearInterval(this.interval);
       $('.mover').css("-webkit-animation-play-state", "paused");
+      this.pushAtk();
     }
-    // setTimeout(function() {
-    //   mv.css("-webkit-animation-play-state", "paused");
-    // }, 1000);
-    // if (style.webkitAnimationPlayState === 'running') {
-    //   clearInterval(interval);
-    //   style.webkitAnimationPlayState = 'paused';
-    // } else {
-    //   style.webkitAnimationPlayState = 'running';
-    // }
   }
 
-  keyHandler(e){
-    // if (e == 'Enter'){
-      alert("ENTER!");
-    // }
+  skillScoreCounter(){
+    var i = this.skillVal; //1/20th of animation-duration.
+    var val = 25; //1/20th of animation-duration.
+    var called = false;
+    this.interval = setInterval(increment, val);
+    var pcTxt = document.getElementById("pc-dmg");
+    var pcDmgTxt = document.getElementById("pc-dmg-txt");
+    var here = this;
+    function increment(){
+      pcTxt.innerHTML = i;
+      if (i == val * 20){
+        i = val;
+        pcDmgTxt.innerHTML = "Low Effect";
+        here.effect = "low";
+      } else {
+        if (i == (val * 5) || i == (val * 6) || i == (val * 7) || i == (val * 8)
+      || i == (val * 13) || i == (val * 14) || i == (val * 15) || i == (val * 16)){
+          pcDmgTxt.innerHTML = "Med Effect";
+          here.effect = "med";
+        } else if (i == (val * 9) || i == (val * 10) || i == (val * 11) || i == (val * 12)){
+          pcDmgTxt.innerHTML = "High Effect";
+          here.effect = "high";
+        } else if (i == val || i == (val * 2) || i == (val * 3) || i == (val * 4) || i == (val * 17) || i == (val * 18) || i == (val * 19) || i == (val * 20)){
+          pcDmgTxt.innerHTML = "Low Effect";
+          here.effect = "low";
+        }
+        i = i + val;
+        here.skillVal = i;
+      }
+    }
   }
 
 
@@ -184,7 +224,7 @@ class Battle extends React.Component {
 
 
     return (
-    <div className="container" onKeyPress={this.keyHandler}>
+    <div className="container">
       <div className="row">
         <div className="col">
           <div className="row">
@@ -224,20 +264,23 @@ class Battle extends React.Component {
       <div className="col-4">
           {attack_div}
       </div>
-      <div className="col">
-        <div className="talk-bubble">
-          <p id="dialog">Waiting for {this.state.attacker} to select attack</p>
+      <div className="col-8">
+        <div className="row h-50">
+          <div className="col-12 h-50">
+             <div id="pc-dmg"></div><div id="pc-dmg-txt"></div>
+            <div className="skill-bar"><div className="mover"></div></div>
+          </div>
+        </div>
+        <div className="row h-50">
+          <div className="col-12">
+            <div className="talk-bubble">
+              <p id="dialog">Waiting for {this.state.attacker} to select attack</p>
+            </div>
+            </div>
         </div>
       </div>
     </div>
-    <div className="row">
-      <div className="col">
-        <button id="toggle" onClick={this.handleToggle.bind(this)} value='play'>Play</button>
-         <div id="pc-dmg"></div><div id="pc-dmg-txt"></div>
-        <div className="skill-bar"><div className="mover"></div></div>
-      </div>
-    </div>
-    </div>
+  </div>
     );
   }
 }
@@ -266,9 +309,7 @@ function AttackButton(props) {
 
 }
 
-$(document).keypress(function() {
-  this.handleToggle();
-});
+
   // $(document).ready(function() {
   //   var counter = 0,
   //   progressbar = setInterval(function()

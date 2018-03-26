@@ -160,9 +160,9 @@ end
 
   # method to register clicks from UI
   def clicked(game) do
-    cond do 
+    cond do
       game.attacker == game.player1 ->
-        %{ 
+        %{
           player1: Map.get(game, "player1"),
           player2: Map.get(game, "player2"),
           poke1: Map.get(game, "poke1"),
@@ -178,6 +178,19 @@ end
   end
 
   def attack(game, atkMap) do
+    dmgFactor = 1;
+    effect = Map.get(atkMap, "effect")
+    cond do
+      effect == "low" ->
+        dmgFactor = 0.5;
+      effect == "med" ->
+        dmgFactor = 1;
+      effect == "high" ->
+        dmgFactor = 1.5;
+    end
+
+    IO.inspect("DAMAGE FACTOR!!!!!!!!!!!!!!!!!!!!!!!")
+    IO.inspect(dmgFactor)
       cond do
         game.attacker == game.player1 ->
           dmg = Map.get(atkMap, "dmg")
@@ -190,7 +203,7 @@ end
             energy = energy + 20
             poke1 = Map.replace!(game.poke1, "energy", energy)
             poke2hp = Map.get(game.poke2, "hp")
-            poke2hp = poke2hp - dmg
+            poke2hp = poke2hp - (dmg * dmgFactor)
             poke2 = Map.replace!(game.poke2, "hp", poke2hp)
             game = Map.replace!(game, :poke1, poke1)
             game = Map.replace!(game, :poke2, poke2)
@@ -201,7 +214,7 @@ end
               game = Map.replace!(game, :poke2, poke2)
               game = Map.replace!(game, :game_over, true)
               game
-            else 
+            else
               game
             end
           end
@@ -216,7 +229,7 @@ end
             energy = energy + 20
             poke2 = Map.replace!(game.poke2, "energy", energy)
             poke1hp = Map.get(game.poke1, "hp")
-            poke1hp = poke1hp - dmg
+            poke1hp = poke1hp - (dmg * dmgFactor)
             poke1 = Map.replace!(game.poke1, "hp", poke1hp)
             game = Map.replace!(game, :poke1, poke1)
             game = Map.replace!(game, :poke2, poke2)
@@ -227,7 +240,7 @@ end
               game = Map.replace!(game, :poke1, poke1)
               game = Map.replace!(game, :game_over, true)
               game
-            else 
+            else
               game
             end
           end

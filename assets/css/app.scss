@@ -97,28 +97,17 @@ body {
     border-radius: 25px;
     position: fixed;
 }
-// .mover {
-//   width: 70px;
-//   height: 70px;
-//   /* background-image: url("https://www.pokethmon.com/images/pokeball.png"); */
-//   background-color:red;
-//   border: solid;
-//   border-radius: 25px;
-//   /* background-position: center center; */
-//   padding: 20px;
-//   position: relative;
-//   // margin-left: 50%;
-// }
 
 .mover {
     width: 70px;
     height: 70px;
     /* background-image: url("https://www.pokethmon.com/images/pokeball.png"); */
     background-color:red;
-    border: solid;
+    // border: solid;
     border-radius: 25px;
     /* background-position: center center; */
     padding: 20px;
+
     position: relative;
     -webkit-animation-name: example; /* Safari 4.0 - 8.0 */
     -webkit-animation-duration: 0.5s; /* Safari 4.0 - 8.0 */
@@ -130,7 +119,19 @@ body {
     animation-iteration-count: infinite;
     animation-direction: alternate-reverse;
     animation-timing-function: linear;
-    // margin-left: 50%;
+}
+
+.paused {
+  width: 70px;
+  height: 70px;
+  /* background-image: url("https://www.pokethmon.com/images/pokeball.png"); */
+  background-color:red;
+  // border: solid;
+  border-radius: 25px;
+  /* background-position: center center; */
+  padding: 20px;
+
+  position: relative;
 }
 
 /* Safari 4.0 - 8.0 */

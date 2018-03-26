@@ -20,12 +20,16 @@ defmodule PokemonWeb.GamesChannel do
 
   def handle_info({:after_join, game}, socket) do
     IO.inspect("AFTER_JOIN")
-    broadcast! socket, "state_update", game
     push socket, "presence_state", Presence.list(socket)
     {:ok, _} = Presence.track(socket, socket.assigns[:user], %{
        online_at: inspect(System.system_time(:seconds))
     })
-    broadcast! socket, "user:joined", game
+    broadcast! socket, "state_update", game
+    {:noreply, socket}
+  end
+
+  def handle_info({:game_update, game}, socket) do
+    broadcast! socket, "state_update", game
     {:noreply, socket}
   end
 
@@ -49,8 +53,13 @@ defmodule PokemonWeb.GamesChannel do
   end
 
   def handle_in("attack", params, socket) do
+    IO.inspect("ATTACK")
     game = Game.attack(socket.assigns[:game], params)
-    send(self, {:after_join, game})
+    IO.inspect("GAME RECEIVED")
+    IO.inspect(game)
+    IO.inspect("GAME RECEIVED END")
+
+    send(self, {:game_update, game})
     Pokemon.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
     {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
