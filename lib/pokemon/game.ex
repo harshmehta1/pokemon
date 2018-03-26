@@ -14,26 +14,6 @@ defmodule Pokemon.Game do
     }
   end
 
- def addPlayer(game, player, pokemon) do
-   state = game.state
-   if player == 1 do
-     %{
-       player1: game.player1 ++ [[pokemon, 100, 0]],
-       player2: game.player2,
-       poke1: game.poke1 ++ [[pokemon]],
-       poke2: game.poke2,
-       state: game.state
-      }
-   else
-     %{
-       player1: game.player1,
-       player2: game.player2 ++ [[pokemon, 100, 0]],
-       poke1: game.poke1,
-       poke2: game.poke2 ++ [[pokemon]],
-       state: game.state
-      }
-    end
-  end
 
   def client_view(game) do
     %{
@@ -125,27 +105,6 @@ def randPokemon(game) do
   end
   poke
 end
-  # Method to determine state of userName
-  defp get_player(game, userName) do
-    cond do
-      game.player1 == userName ->
-      # player 1
-        1
-      game.player2 == userName ->
-      # player 2
-        2
-      Enum.member?(game.observers, userName) ->
-      # observers
-        0
-      true ->
-      # catch any unhandled cases
-        -1
-    end
-  end
-
-  def player_join(game) do
-    game
-  end
 
   def update_state(game) do
     %{
