@@ -18,7 +18,8 @@ class Battle extends React.Component {
       poke1: [],
       poke2: [],
       attacker: "",
-      ready_to_fire: false
+      ready_to_fire: false,
+      game_over: false,
     };
 
     this.channel.join()
@@ -40,6 +41,13 @@ class Battle extends React.Component {
   //gets view from the server and sets the state of the ga  me
   gotView(view){
     this.setState(view.game);
+  }
+
+  restart() {
+    setTimeout(
+      () => this.channel.push("restart").receive("ok", this.gotView.bind(this)),
+      1000
+    );
   }
 
   clickAtk(atkBtn){
@@ -90,6 +98,30 @@ class Battle extends React.Component {
 
 
   render(){
+    let winner = null;
+    if (this.state.poke2.hp < this.state.poke1.hp) {
+      winner = this.state.player1;
+    }
+
+    if (this.state.game_over == true) {
+    // Attribution to: https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_modal_show_hide&stacked=h
+      return (
+        <div class="gameOver" tabindex="-1" id="gameOver" role="dialog">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <h2 class="modal-title">Game over!</h2>
+              </div>
+              <div class="modal-body">
+                <p>{winner} wins the game</p>
+              </div>
+              <div class="modal-footer">
+                <Button type="button" class="btn btn-secondary" onClick={this.restart.bind(this)}>Play Again</Button>
+              </div>
+            </div>
+          </div>
+        </div>);
+    }
 
     let skill_button = null;
     let empty_div = <div></div>;
@@ -209,6 +241,8 @@ class Battle extends React.Component {
     );
   }
 }
+
+
 
 //returns the element for tile
 function AttackButton(props) {
