@@ -1,16 +1,16 @@
-<script>
+ <script>
   function joinChannel() {
     let game = $("#channelName").val();
     if (game === "") {
       alert("Please enter a game name.");
-      return;
+      return false;
     }
     let userName = $("#userName").val();
     if (userName === "") {
       alert("Please enter a user name.");
-      return;
+      return false;
     }
-    
+
     let link = "/game/" + game + "?userName=" + userName;
     window.location.href = link;
   }
@@ -19,6 +19,7 @@
   //alert("1. Enter a channel name. You will be able to play an opponent who joins the same channel.\n2. Enter a username you wish to play as.\n3. Click the "Let's Play" button.\n4. Upon joining the game, you will be randomly assigned a Pokemon.\n5. When both players are present, the game will begin. \n6. When it is your turn, select an attack. \n7. Once an attack is selected, you must stop the effectiveness meter with the spacebar to determine your attack's effectiveness.")
   return;
 }
+
 </script>
 
 <div class="container">
@@ -27,23 +28,31 @@
       <div class="index">
         <img src="./images/poke-logo.png" class="logo" style="width:20%"><br>
         <h2 id="index-page">Ready to catch 'em all?<br>Create a game or Join an exisiting one!</h2><br />
-        <div class="col">
-          Enter a channel name to create/join:
-          <input id="channelName" type="text"/>
-         </div>
-         <div class="row"><br /></div>
-         <div class="col">
-           <span>Enter a username:</span>
-           <input id="userName" type="text"/>
-         </div>
+        <div class="row">
+          <div class="col index-label">
+            Enter channel name to create/join:
+          </div>
+          <div class="col index-input">
+            <input id="channelName" type="text" class="form-control index"/>
+          </div>
         </div>
-        <div class="row"><br /></div>
-        <div class="centered_buttons">
+          <div class="row">
+            <div class="col index-label">
+              <span>Enter username:</span>
+            </div>
+            <div class="col index-input">
+              <input id="userName" type="text" class="form-control index"/>
+            </div>
+          </div>
+          <div class="row"><br /></div>
           <div class="centered_buttons">
-            <input id="game-btn" type="button" onClick="joinChannel()" value="Let's Play">
-            <button type="button" class="btn btn-warning", onClick="instructions()">How to play?</button>
+            <div class="centered_buttons">
+              <input id="game-btn" class="btn btn-primary" type="submit" onclick="joinChannel()" value="Let's Play">
+              <button type="button" class="btn btn-warning", onClick="instructions()">How to play?</button>
+            </div>
+          </div>
         </div>
-      </div>
+
     </div>
   </div>
  </div>

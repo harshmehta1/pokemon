@@ -331,3 +331,26 @@ body {
   transform: translate(-50%, -50%);
 
 }
+
+#game-btn {
+  margin-right: 5%;
+}
+
+.col.index-label {
+  font-size: 1.1em;
+  vertical-align: middle;
+  display: table-cell;
+  padding-top: 8px;
+  text-align: right;
+}
+
+.col.index-input {
+  text-align: left;
+  margin-bottom: 1%;
+}
+
+.form-control.index {
+  width: 50%;
+  margin: 0px;
+  display: block;
+}
