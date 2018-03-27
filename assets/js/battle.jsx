@@ -76,15 +76,21 @@ class Battle extends React.Component {
       }, false);
 
       audioElement.pause();
+      _.soundPlaying = false;
+
+      $("#sound-img").attr("src", "/images/sound-off.png");
       audioElement.volume = 0.15;
+
 
       $("#sound").click(function(){
         if (_.soundPlaying == true){
           audioElement.pause();
+          $("#sound-img").attr("src", "/images/sound-off.png");
           _.soundPlaying = false;
         } else {
           audioElement.play();
           _.soundPlaying = true;
+          $("#sound-img").attr("src", "/images/sound-on.png");
         }
         console.log(_.soundPlaying)
       });
@@ -212,13 +218,7 @@ class Battle extends React.Component {
           window.history.back();
     }
 
-    let sound_div = <div></div>;
-      console.log(this.soundPlaying)
-    if (this.soundPlaying == true){
-      sound_div =  <div id="sound"><img src="/images/sound-on.png" id="sound-img"/></div>;
-    } else {
-      sound_div =  <div id="sound"><img src="/images/sound-off.png" id="sound-img"/></div>;
-    }
+    let sound_div = <div id="sound"><img src="/images/sound-on.png" id="sound-img"/></div>;
 
 
     if (this.state.dialogue == ""){
