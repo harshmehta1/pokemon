@@ -121,52 +121,63 @@ end
   end
 
   # method to register clicks from UI
-  def clicked(game) do
-    cond do
-      game.attacker == game.player1 ->
-        %{
-          player1: Map.get(game, "player1"),
-          player2: Map.get(game, "player2"),
-          poke1: Map.get(game, "poke1"),
-          poke2: Map.get(game, "poke2"),
-          observers: [],
-          attacker: Map.get(game, "attacker"),
-          ready_to_fire: true
-         }
-      true ->
-        game
-        IO.inspect(game)
-    end
-  end
+  # def clicked(game) do
+  #   cond do
+  #     game.attacker == game.player1 ->
+  #       %{
+  #         player1: Map.get(game, "player1"),
+  #         player2: Map.get(game, "player2"),
+  #         poke1: Map.get(game, "poke1"),
+  #         poke2: Map.get(game, "poke2"),
+  #         observers: [],
+  #         attacker: Map.get(game, "attacker"),
+  #         ready_to_fire: true
+  #        }
+  #     true ->
+  #       game
+  #       # IO.inspect(game)
+  #   end
+  # end
 
   def attack(game, atkMap) do
-    dialogue = Map.get(atkMap, "dialogue")
     energyFactor = 0
     effectDialogue = ""
-    game = Map.replace!(game, :dialogue, dialogue)
     dmgFactor = 1
     effect = Map.get(atkMap, "effect")
-    cond do
-      effect == "low" ->
-        dmgFactor = 0.5
-        energyFactor = 20
-        effectDialogue = ",but, it was very WEAK!"
-      effect == "med" ->
-        dmgFactor = 1
-        energyFactor = 30
-        effectDialogue = "and, it was EFFECTIVE!"
-      effect == "high" ->
-        dmgFactor = 1.5
-        energyFactor = 40
-        effectDialogue = "and, it was SUPER EFFECTIVE!"
-    end
+    random_number = :rand.uniform(100)
+    poke1_type = Map.get(game.poke1, "type")
+    poke1_weakness = Map.get(game.poke1, "weakness")
+    poke2_type = Map.get(game.poke2, "type")
+    poke2_weakness = Map.get(game.poke2, "weakness")
+    weakness_text = ""
+    IO.inspect(random_number)
+    if random_number >= 30 do
+      cond do
+        effect == "low" ->
+          dmgFactor = 0.5
+          energyFactor = 20
+          effectDialogue = ", but, it was very WEAK!"
+        effect == "med" ->
+          dmgFactor = 1
+          energyFactor = 30
+          effectDialogue = "and, it was EFFECTIVE!"
+        effect == "high" ->
+          dmgFactor = 1.5
+          energyFactor = 40
+          effectDialogue = "and, it was SUPER EFFECTIVE!"
+      end
 
-    IO.inspect("DAMAGE FACTOR!!!!!!!!!!!!!!!!!!!!!!!")
-    IO.inspect(dmgFactor)
       cond do
         game.attacker == game.player1 ->
           dmg = Map.get(atkMap, "dmg")
+          poke1_name = Map.get(game.poke1, "name")
+          poke2_name = Map.get(game.poke2, "name")
+          atk_name = Map.get(atkMap, "name")
           finDmg = dmg * dmgFactor
+          if poke2_weakness == poke1_type do
+            finDmg = finDmg + 5
+            weakness_text = Enum.join(["Additonally,",poke2_name,"is weaker to",poke2_weakness,"type Pokemons. Thus, receiving an additional damage of 5 HP!"]," ")
+          end
           spl = Map.get(atkMap, "spl")
           energy = Map.get(game.poke1, "energy")
             energy = energy + energyFactor
@@ -180,10 +191,8 @@ end
             game = Map.replace!(game, :poke1, poke1)
             game = Map.replace!(game, :poke2, poke2)
             game = Map.replace!(game, :attacker, game.player2)
-            poke1_name = Map.get(game.poke1, "name")
-            poke2_name = Map.get(game.poke2, "name")
-            atk_name = Map.get(atkMap, "name")
-            newDialogue = Enum.join([poke1_name,"used",atk_name,effectDialogue,"It caused", poke2_name,"a damage of",finDmg,"HP!"]," ")
+
+            newDialogue = Enum.join([poke1_name,"used",atk_name,effectDialogue,"It caused", poke2_name,"a damage of",finDmg,"HP!",weakness_text]," ")
             game = Map.replace!(game, :dialogue, newDialogue)
 
             if poke2hp <= 0 do
@@ -197,7 +206,14 @@ end
         game.attacker == game.player2 ->
           dmg = Map.get(atkMap, "dmg")
           spl = Map.get(atkMap, "spl")
+          poke1_name = Map.get(game.poke1, "name")
+          poke2_name = Map.get(game.poke2, "name")
+          atk_name = Map.get(atkMap, "name")
           finDmg = dmg * dmgFactor
+          if poke1_weakness == poke2_type do
+            finDmg = finDmg + 5
+            weakness_text = Enum.join(["Additonally,",poke1_name,"is weaker to",poke1_weakness,"type Pokemons. Thus, receiving an additional damage of 5 HP!"]," ")
+          end
           energy = Map.get(game.poke2, "energy")
             energy = energy + energyFactor
             if energy > 100 do
@@ -210,10 +226,8 @@ end
             game = Map.replace!(game, :poke1, poke1)
             game = Map.replace!(game, :poke2, poke2)
             game = Map.replace!(game, :attacker, game.player1)
-            poke1_name = Map.get(game.poke1, "name")
-            poke2_name = Map.get(game.poke2, "name")
-            atk_name = Map.get(atkMap, "name")
-            newDialogue = Enum.join([poke2_name,"used",atk_name,effectDialogue,"It caused", poke1_name,"a damage of",finDmg,"HP!"]," ")
+
+            newDialogue = Enum.join([poke2_name,"used",atk_name,effectDialogue,"It caused", poke1_name,"a damage of",finDmg,"HP!",weakness_text]," ")
             game = Map.replace!(game, :dialogue, newDialogue)
             if poke1hp <= 0 do
               poke1 = Map.replace!(game.poke1, "hp", 0)
@@ -226,10 +240,25 @@ end
         true ->
           game
       end
+    else
+      poke1_name = Map.get(game.poke1, "name")
+      poke2_name = Map.get(game.poke2, "name")
+      atk_name = Map.get(atkMap, "name")
+      if game.attacker == game.player1 do
+        newDialogue = Enum.join([poke1_name,"used",atk_name,"but it was BLOCKED by",poke2_name]," ")
+        game = Map.replace!(game, :dialogue, newDialogue)
+        game = Map.replace!(game, :attacker, game.player2)
+      else
+        newDialogue = Enum.join([poke2_name,"used",atk_name,"but it was BLOCKED by",poke1_name]," ")
+        game = Map.replace!(game, :dialogue, newDialogue)
+        game = Map.replace!(game, :attacker, game.player1)
+      end
+      game
+    end
   end
 
   def add_user(game, userName) do
-    IO.inspect(userName)
+    # IO.inspect(userName)
     cond do
       game.player1 == "" and game.player2 == "" ->
         pokemon = randPokemon(game)
@@ -237,16 +266,16 @@ end
         game = Map.replace!(game, :player1, userName)
         game = Map.replace!(game, :attacker, userName)
         game = Map.put(game, :poke1, pokemon)
-        IO.inspect(game)
+        # IO.inspect(game)
       game.player1 != "" and game.player2 == "" and game.player1 != userName ->
         pokemon = randPokemon(game)
         pokemon = Map.put(pokemon, :id, "p2")
         game = Map.replace!(game, :player2, userName)
         game = Map.put(game, :poke2, pokemon)
-        IO.inspect(game)
+        # IO.inspect(game)
       true ->
         game
-        IO.inspect(game)
+        # IO.inspect(game)
     end
   end
 

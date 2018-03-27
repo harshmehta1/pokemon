@@ -258,7 +258,8 @@ class Battle extends React.Component {
         </div>
         <div className="row">
           <div className="col">
-                <p>Trainer <b>{this.state.player2}</b> has chosen <b><i>{this.state.poke2.name}</i></b></p>
+                <p>Trainer <b>{this.state.player2}</b> has chosen <b><i>{this.state.poke2.name}</i></b><br/>
+                  [Type: <b>{this.state.poke2.type}</b>. Weakness: <b>{this.state.poke2.weakness}</b>]</p>
           </div>
         </div>
         <div className="row">
@@ -310,7 +311,8 @@ class Battle extends React.Component {
             <div className="col">
               <div className="row">
                 <div className="col-8">
-                  <p>Trainer <b>{this.state.player1}</b> has chosen <b><i>{this.state.poke1.name}</i></b></p>
+                  <p>Trainer <b>{this.state.player1}</b> has chosen <b><i>{this.state.poke1.name}</i></b><br/>
+                    [Type: <b>{this.state.poke1.type}</b>. Weakness: <b>{this.state.poke1.weakness}</b>]</p>
                 </div>
               </div>
             </div>
