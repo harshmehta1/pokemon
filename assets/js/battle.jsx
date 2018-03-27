@@ -57,7 +57,13 @@ class Battle extends React.Component {
       }
     });
 
+    $(window).on("beforeunload", function() {
+      _.channel.push("leave", this.userName)
+        .receive("ok", );
+    });
   }
+
+
   //gets view from the server and sets the state of the ga  me
   gotView(view){
     this.setState(view.game);
@@ -71,6 +77,8 @@ class Battle extends React.Component {
   }
 
   clickAtk(atkBtn){
+    if (this.state.player2 != "") {
+    if(this.state.game_over == false){
     if(this.state.attacker == this.userName && this.atkClicked == false){
       if (atkBtn.spl == true){
         if (this.state.attacker == this.state.player1) {
@@ -88,8 +96,10 @@ class Battle extends React.Component {
         }
       } else {
         this.atkHandler(atkBtn);
+        }
       }
     }
+  }
   }
 
   atkHandler(atkBtn){
@@ -106,13 +116,16 @@ class Battle extends React.Component {
     this.currAtk = null;
 
     setTimeout(function(){
+      console.log("stopped")
       $('.mover').css("webkitAnimation", "none");
     }, 1000);
 
     setTimeout(function(){
+      console.log("strted anim and paused")
       $('.mover').css("webkitAnimation", '');
       $('.mover').css("-webkit-animation-play-state", "paused");
-    }, 1002);
+    }, 1005);
+
     this.skillVal = 25;
     this.atkClicked = false;
   }
@@ -402,9 +415,9 @@ function AttackButton(props) {
 
   //decide the className and text to show depending on whether tile has been matched
   if(spl == true){
-    style = "btn btn-warning"
+    style = "btn btn-warning atk"
   } else {
-    style = "btn btn-info"
+    style = "btn btn-info atk"
   }
 
   return <Button className={style} val={name} dmg={dmg} spl={spl.toString()} player={player} onClick={() => props.clickAtk(atk)}>{name}</Button>;

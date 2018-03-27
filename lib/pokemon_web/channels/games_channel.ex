@@ -63,6 +63,7 @@ defmodule PokemonWeb.GamesChannel do
 
   def handle_in("reset_game", game, socket) do
     userName = socket.assigns[:user]
+    game = Game.update_state(game)
     game = Game.add_user(game, userName)
     send(self, {:game_update, game})
     Pokemon.GameBackup.save(socket.assigns[:name], game)
@@ -78,5 +79,13 @@ defmodule PokemonWeb.GamesChannel do
     {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
   end
 
+  def handle_in("leave", userid, socket) do
+    IO.inspect("EXITING")
+    game = Game.handle_exit(socket.assigns[:game], userid)
+    Pokemon.GameBackup.save(socket.assigns[:name], game)
+    send(self, {:game_update, game})
+    socket = assign(socket, :game, game)
+    {:noreply, socket}
+  end
 
 end

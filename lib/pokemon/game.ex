@@ -32,64 +32,64 @@ def getPokeList() do
   [
   %{:name => "Pikachu", :hp => 100, :energy => 5,
       :attacks => [%{:name => "Quick Attack",
-                     :dmg => 10,
+                     :dmg => 5,
                      :spl => false},
                   %{:name => "Electric Shock",
-                    :dmg => 20,
+                    :dmg => 10,
                     :spl => false},
                   %{:name => "Thunder Bolt",
-                    :dmg => 30,
+                    :dmg => 15,
                     :spl => false},
                   %{:name => "Thunder Shock",
-                    :dmg => 50,
+                    :dmg => 30,
                     :spl => true},],
      :type => "Electric",
      :weakness => "Grass",
      :image => "/images/pikachu.png"},
  %{:name => "Charmander", :hp => 100, :energy => 5,
     :attacks => [%{:name => "Scratch",
-                    :dmg => 10,
+                    :dmg => 5,
                     :spl => false},
                   %{:name => "Lava Burn",
-                    :dmg => 20,
+                    :dmg => 10,
                     :spl => false},
                   %{:name => "Fire Fang",
-                    :dmg => 30,
+                    :dmg => 15,
                     :spl => false},
                   %{:name => "Inferno",
-                    :dmg => 50,
+                    :dmg => 30,
                     :spl => true},],
     :type => "Fire",
     :weakness => "Water",
     :image => "/images/charmander.png"},
  %{:name => "Squirtle", :hp => 100, :energy => 5,
  :attacks => [%{:name => "Tail Whip",
-                :dmg => 10,
+                :dmg => 5,
                 :spl => false},
              %{:name => "Water Gun",
-               :dmg => 20,
+               :dmg => 10,
                :spl => false},
              %{:name => "Aqua Tail",
-               :dmg => 30,
+               :dmg => 15,
                :spl => false},
              %{:name => "Hydro Pump",
-               :dmg => 50,
+               :dmg => 30,
                :spl => true},],
      :type => "Water",
      :weakness => "Electric",
      :image => "/images/squirtle.png"},
  %{:name => "Bulbasaur", :hp => 100, :energy => 5,
  :attacks => [%{:name => "Tackle",
-                :dmg => 10,
+                :dmg => 5,
                 :spl => false},
              %{:name => "Vine Whip",
-               :dmg => 20,
+               :dmg => 10,
                :spl => false},
              %{:name => "Razor Leaf",
-               :dmg => 30,
+               :dmg => 15,
                :spl => false},
              %{:name => "Seed Bomb",
-               :dmg => 50,
+               :dmg => 30,
                :spl => true},],
    :type => "Grass",
    :weakness => "Fire",
@@ -112,7 +112,6 @@ end
       player2: Map.get(game, "player2"),
       poke1: Map.get(game, "poke1"),
       poke2: Map.get(game, "poke2"),
-      observers: [],
       attacker: Map.get(game, "attacker"),
       game_over: Map.get(game, "game_over"),
       dialogue: Map.get(game, "dialogue"),
@@ -157,20 +156,21 @@ end
           finDmg = dmg * dmgFactor
           if poke2_weakness == poke1_type do
             finDmg = finDmg + 5
-            weakness_text = Enum.join(["Additonally,",poke2_name,"is weaker to",poke2_weakness,"type Pokemons. Thus, receiving an additional damage of 5 HP!"]," ")
+            weakness_text = Enum.join([poke2_name,"is weaker to",poke2_weakness,"type Pokemons. Thus, receiving an additional damage of 5 HP!"]," ")
           end
           spl = Map.get(atkMap, "spl")
-          if spl != "true" do
-            energy = Map.get(game.poke1, "energy")
-              energy = energy + energyFactor
-              if energy > 100 do
-                energy = 100
-              end
-          else
-            energy = 5
-          end
+            if spl != true do
+              energy = Map.get(game.poke1, "energy")
+                energy = energy + energyFactor
+                if energy > 100 do
+                  energy = 100
+                end
+            else
+              energy = 5
+            end
             poke1 = Map.replace!(game.poke1, "energy", energy)
             poke2hp = Map.get(game.poke2, "hp")
+            finDmg = Kernel.round(finDmg)
             poke2hp = poke2hp - finDmg
             poke2 = Map.replace!(game.poke2, "hp", poke2hp)
             game = Map.replace!(game, :poke1, poke1)
@@ -191,7 +191,7 @@ end
             else
               game
             end
-        game.attacker == game.player2 ->
+      game.attacker == game.player2 ->
           dmg = Map.get(atkMap, "dmg")
           spl = Map.get(atkMap, "spl")
           poke1_name = Map.get(game.poke1, "name")
@@ -200,15 +200,20 @@ end
           finDmg = dmg * dmgFactor
           if poke1_weakness == poke2_type do
             finDmg = finDmg + 5
-            weakness_text = Enum.join(["Additonally,",poke1_name,"is weaker to",poke1_weakness,"type Pokemons. Thus, receiving an additional damage of 5 HP!"]," ")
+            weakness_text = Enum.join([poke1_name,"is weaker to",poke1_weakness,"type Pokemons. Thus, receiving an additional damage of 5 HP!"]," ")
           end
-          energy = Map.get(game.poke2, "energy")
-            energy = energy + energyFactor
-            if energy > 100 do
-              energy = 100
-            end
+          if spl != true do
+            energy = Map.get(game.poke2, "energy")
+              energy = energy + energyFactor
+              if energy > 100 do
+                energy = 100
+              end
+          else
+            energy = 5
+          end
             poke2 = Map.replace!(game.poke2, "energy", energy)
             poke1hp = Map.get(game.poke1, "hp")
+            finDmg = Kernel.round(finDmg)
             poke1hp = poke1hp - finDmg
             poke1 = Map.replace!(game.poke1, "hp", poke1hp)
             game = Map.replace!(game, :poke1, poke1)
@@ -229,20 +234,29 @@ end
               game
             end
         true ->
-          game
+            game
       end
     else
       poke1_name = Map.get(game.poke1, "name")
       poke2_name = Map.get(game.poke2, "name")
       atk_name = Map.get(atkMap, "name")
+      atk_spl = Map.get(atkMap, "spl")
       if game.attacker == game.player1 do
         newDialogue = Enum.join([poke1_name,"used",atk_name,"but it was BLOCKED by",poke2_name]," ")
         game = Map.replace!(game, :dialogue, newDialogue)
         game = Map.replace!(game, :attacker, game.player2)
+        if atk_spl == true do
+          new_poke1 = Map.replace!(game.poke1, "energy", 5)
+          game = Map.replace!(game, :poke1, new_poke1)
+        end
       else
         newDialogue = Enum.join([poke2_name,"used",atk_name,"but it was BLOCKED by",poke1_name]," ")
         game = Map.replace!(game, :dialogue, newDialogue)
         game = Map.replace!(game, :attacker, game.player1)
+        if atk_spl == true do
+          new_poke2 = Map.replace!(game.poke2, "energy", 5)
+          game = Map.replace!(game, :poke2, new_poke2)
+        end
       end
       game
     end
@@ -267,6 +281,25 @@ end
       true ->
         game
         # IO.inspect(game)
+    end
+  end
+
+  def handle_exit(game, userName) do
+    cond do
+      userName == game.player1 ->
+        game = Map.replace!(game, :winner, game.player2)
+        newDialogue = Enum.join([game.player1,"has left the game"]," ")
+        game = Map.replace!(game, :dialogue, newDialogue)
+        game = Map.replace!(game, :game_over, true)
+        game
+      userName == game.player2 ->
+        game = Map.replace!(game, :winner, game.player1)
+        newDialogue = Enum.join([game.player2,"has left the game"]," ")
+        game = Map.replace!(game, :dialogue, newDialogue)
+        game = Map.replace!(game, :game_over, true)
+        game
+      true ->
+        game
     end
   end
 
