@@ -97,28 +97,6 @@ class Battle extends React.Component {
 
   pushAtk(){
     console.log("attacked!")
-    var dmgWeight;
-    var effectDialogue;
-    if (this.effect == "low"){
-      effectDialogue = ",but, it couldn't connect!";
-      dmgWeight = 0.5;
-    } else if (this.effect == "med"){
-      dmgWeight = 1;
-      effectDialogue = "and, it was EFFECTIVE!";
-    } else {
-      dmgWeight = 1.5;
-      effectDialogue = "and, it was SUPER EFFECTIVE!";
-    }
-    var finDmg = this.currAtk.dmg * dmgWeight;
-    console.log(this.state.attacker)
-    console.log(this.state.player1)
-    this.dialogueSet = true;
-    if (this.state.attacker == this.state.player1){
-        this.state.dialogue = this.state.poke1.name + " used " + this.currAtk.name +" "+ effectDialogue + " It caused "+this.state.poke2.name+" a loss of "+finDmg+"HP!";
-    } else {
-        this.state.dialogue = this.state.poke2.name + " used " + this.currAtk.name +" "+ effectDialogue + " It caused "+this.state.poke1.name+" a loss of "+finDmg+"HP!";
-    }
-    console.log(this.state.dialogue)
     var atk = {dmg: this.currAtk.dmg, name: this.currAtk.name, spl: this.currAtk.spl, effect: this.effect, dialogue: this.state.dialogue}
     this.channel.push("attack", atk)
         .receive("ok", this.gotView.bind(this));
@@ -131,16 +109,9 @@ class Battle extends React.Component {
     setTimeout(function(){
       $('.mover').css("webkitAnimation", '');
       $('.mover').css("-webkit-animation-play-state", "paused");
-    }, 2000);
-    // $('.mover').css("-webkit-animation-play-state", "paused");
+    }, 1002);
     this.skillVal = 25;
     this.atkClicked = false;
-    var context = this;
-    setTimeout(function(){
-      context.dialogueSet = false;
-      context.state.dialogue = "Waiting for " + context.state.attacker + " to attack";
-    }, 3000);
-
   }
 
   handleToggle(){
@@ -191,7 +162,7 @@ class Battle extends React.Component {
 
   render(){
 
-    if (this.dialogueSet == false){
+    if (this.state.dialogue == ""){
       this.state.dialogue = "Waiting for " + this.state.attacker + " to attack";
     }
 

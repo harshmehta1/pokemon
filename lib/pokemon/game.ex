@@ -141,16 +141,24 @@ end
 
   def attack(game, atkMap) do
     dialogue = Map.get(atkMap, "dialogue")
+    energyFactor = 0
+    effectDialogue = ""
     game = Map.replace!(game, :dialogue, dialogue)
-    dmgFactor = 1;
+    dmgFactor = 1
     effect = Map.get(atkMap, "effect")
     cond do
       effect == "low" ->
-        dmgFactor = 0.5;
+        dmgFactor = 0.5
+        energyFactor = 20
+        effectDialogue = ",but, it was very WEAK!"
       effect == "med" ->
-        dmgFactor = 1;
+        dmgFactor = 1
+        energyFactor = 30
+        effectDialogue = "and, it was EFFECTIVE!"
       effect == "high" ->
-        dmgFactor = 1.5;
+        dmgFactor = 1.5
+        energyFactor = 40
+        effectDialogue = "and, it was SUPER EFFECTIVE!"
     end
 
     IO.inspect("DAMAGE FACTOR!!!!!!!!!!!!!!!!!!!!!!!")
@@ -158,16 +166,25 @@ end
       cond do
         game.attacker == game.player1 ->
           dmg = Map.get(atkMap, "dmg")
+          finDmg = dmg * dmgFactor
           spl = Map.get(atkMap, "spl")
           energy = Map.get(game.poke1, "energy")
-            energy = energy + 20
+            energy = energy + energyFactor
+            if energy > 100 do
+              energy = 100
+            end
             poke1 = Map.replace!(game.poke1, "energy", energy)
             poke2hp = Map.get(game.poke2, "hp")
-            poke2hp = poke2hp - (dmg * dmgFactor)
+            poke2hp = poke2hp - finDmg
             poke2 = Map.replace!(game.poke2, "hp", poke2hp)
             game = Map.replace!(game, :poke1, poke1)
             game = Map.replace!(game, :poke2, poke2)
             game = Map.replace!(game, :attacker, game.player2)
+            poke1_name = Map.get(game.poke1, "name")
+            poke2_name = Map.get(game.poke2, "name")
+            atk_name = Map.get(atkMap, "name")
+            newDialogue = Enum.join([poke1_name,"used",atk_name,effectDialogue,"It caused", poke2_name,"a damage of",finDmg,"HP!"]," ")
+            game = Map.replace!(game, :dialogue, newDialogue)
 
             if poke2hp <= 0 do
               poke2 = Map.replace!(game.poke2, "hp", 0)
@@ -180,16 +197,24 @@ end
         game.attacker == game.player2 ->
           dmg = Map.get(atkMap, "dmg")
           spl = Map.get(atkMap, "spl")
+          finDmg = dmg * dmgFactor
           energy = Map.get(game.poke2, "energy")
-            energy = energy + 20
+            energy = energy + energyFactor
+            if energy > 100 do
+              energy = 100
+            end
             poke2 = Map.replace!(game.poke2, "energy", energy)
             poke1hp = Map.get(game.poke1, "hp")
-            poke1hp = poke1hp - (dmg * dmgFactor)
+            poke1hp = poke1hp - finDmg
             poke1 = Map.replace!(game.poke1, "hp", poke1hp)
             game = Map.replace!(game, :poke1, poke1)
             game = Map.replace!(game, :poke2, poke2)
             game = Map.replace!(game, :attacker, game.player1)
-
+            poke1_name = Map.get(game.poke1, "name")
+            poke2_name = Map.get(game.poke2, "name")
+            atk_name = Map.get(atkMap, "name")
+            newDialogue = Enum.join([poke2_name,"used",atk_name,effectDialogue,"It caused", poke1_name,"a damage of",finDmg,"HP!"]," ")
+            game = Map.replace!(game, :dialogue, newDialogue)
             if poke1hp <= 0 do
               poke1 = Map.replace!(game.poke1, "hp", 0)
               game = Map.replace!(game, :poke1, poke1)
