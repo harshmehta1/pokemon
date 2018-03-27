@@ -10,12 +10,13 @@
       alert("Please enter a user name.");
       return;
     }
+    
     let link = "/game/" + game + "?userName=" + userName;
     window.location.href = link;
   }
 
   function instructions() {
-  alert("1. Enter a channel name.\n2. Enter a username.\n3. Enter instructions for game here");
+  alert("1. Enter a channel name. You will be able to play an opponent who joins the same channel.\n2. Enter a username you wish to play as.\n3. Click the "Let's Play" button.\n4. Upon joining the game, you will be randomly assigned a Pokemon.\n5. When both players are present, the game will begin. \n6. When it is your turn, select an attack. \n7. Once an attack is selected, you must stop the effectiveness meter with the spacebar to determine your attack's effectiveness.")
   return;
 }
 </script>

@@ -10,7 +10,8 @@ defmodule Pokemon.Game do
       attacker: "",
       game_over: false,
       dialogue: "",
-      winner: ""
+      winner: "",
+      duplicate: false
     }
   end
 
@@ -24,7 +25,8 @@ defmodule Pokemon.Game do
       attacker: game.attacker,
       game_over: game.game_over,
       dialogue: game.dialogue,
-      winner: game.winner
+      winner: game.winner,
+      duplicate: game.duplicate
     }
   end
 
@@ -115,7 +117,8 @@ end
       attacker: Map.get(game, "attacker"),
       game_over: Map.get(game, "game_over"),
       dialogue: Map.get(game, "dialogue"),
-      winner: Map.get(game, "winner")
+      winner: Map.get(game, "winner"),
+      duplicate: Map.get(game, "duplicate")
     }
   end
 
@@ -283,6 +286,20 @@ end
         # IO.inspect(game)
     end
   end
+
+  def check_duplicates(game, userName) do
+    cond do
+      game.player1 != "" && game.player2 == "" && game.player1 == userName ->
+        game = Map.replace!(game, :duplicate, true)
+      game.player1 != "" && game.player2 != "" && game.player1 == userName ->
+        game = Map.replace!(game, :duplicate, true)
+      game.player2 != "" && game.player2 == userName ->
+        game = Map.replace!(game, :duplicate, true)
+      true ->
+        game
+    end
+  end
+
 
   def handle_exit(game, userName) do
     cond do

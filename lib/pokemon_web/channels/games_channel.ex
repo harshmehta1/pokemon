@@ -8,6 +8,7 @@ defmodule PokemonWeb.GamesChannel do
     userName = params["userName"]
     IO.inspect(Pokemon.GameBackup.load(name))
     game = Pokemon.GameBackup.load(name) || Game.new()
+    game = Game.check_duplicates(game, userName)
     game = Game.add_user(game, userName)
     send(self, {:after_join, game})
     Pokemon.GameBackup.save(name, game)

@@ -21,6 +21,7 @@ class Battle extends React.Component {
       game_over: false,
       dialogue: "",
       winner: "",
+      duplicate: false,
     };
     this.interval;
     this.effect = "low";
@@ -202,6 +203,11 @@ class Battle extends React.Component {
 
 
   render(){
+
+    if (this.state.duplicate == true) {
+       alert("This user name is taken on this channel. Please try a different user name or channel.")
+          window.history.back();
+    }
 
     let sound_div = <div></div>;
       console.log(this.soundPlaying)

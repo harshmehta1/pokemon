@@ -6,6 +6,6 @@ defmodule PokemonWeb.PageController do
   end
 
   def game(conn, params) do
-    render conn, "game.html", game: params["game"], userName: params["userName"]
+    render conn, "game.html", game: params["game"], userName: params["userName"], id: params["id"]
   end
 end
