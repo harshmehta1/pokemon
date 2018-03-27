@@ -28,6 +28,7 @@ class Battle extends React.Component {
     this.atkClicked = false;
     this.skillVal = 25;
     this.dialogueSet = false;
+    this.soundPlaying = true;
 
     this.channel.join()
       .receive("ok", this.gotView.bind(this))
@@ -61,6 +62,29 @@ class Battle extends React.Component {
       _.channel.push("leave", this.userName)
         .receive("ok", );
     });
+
+    var audioElement = document.createElement('audio');
+    audioElement.setAttribute('src', 'https://www.televisiontunes.com/uploads/audio/Pokemon%20-%20Instrumental.mp3');
+
+      audioElement.addEventListener('ended', function() {
+        console.log("player ended")
+        this.play();
+      }, false);
+
+      audioElement.play();
+      audioElement.volume = 0.15;
+
+      $("#sound").click(function(){
+        if (_.soundPlaying == true){
+          audioElement.pause();
+          _.soundPlaying = false;
+        } else {
+          audioElement.play();
+          _.soundPlaying = true;
+        }
+        console.log(_.soundPlaying)
+      });
+
   }
 
 
@@ -176,7 +200,17 @@ class Battle extends React.Component {
   }
 
 
+
   render(){
+
+    let sound_div = <div></div>;
+      console.log(this.soundPlaying)
+    if (this.soundPlaying == true){
+      sound_div =  <div id="sound"><img src="/images/sound-on.png" id="sound-img"/></div>;
+    } else {
+      sound_div =  <div id="sound"><img src="/images/sound-off.png" id="sound-img"/></div>;
+    }
+
 
     if (this.state.dialogue == ""){
       this.state.dialogue = "Waiting for " + this.state.attacker + " to attack";
@@ -290,6 +324,7 @@ class Battle extends React.Component {
     return (
     <div className="container" id="battleground">
       {win_popup}{lose_popup}{obs_popup}
+      {sound_div}
       <div className="row">
         <div className="col">
           <div className="row">
@@ -389,11 +424,16 @@ function Popup(props){
   if (title != "Game Over!"){
     btn = <Button className="play-again" onClick={() => props.restart()}>Play Again?</Button>;
   }
+  let msg = victor + " has won this Battle!";
+  if (victor == ""){
+    msg = "Player left game!";
+  }
+
   return(
       <div className="popup">
         <div className="popup-content">
           <h1>{title}</h1>
-          <h3>{victor} has won this Battle!</h3>
+          <h3>{msg}</h3>
           {btn}
         </div>
       </div>

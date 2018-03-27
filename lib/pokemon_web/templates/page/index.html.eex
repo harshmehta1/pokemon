@@ -1,6 +1,6 @@
 <script>
   function joinChannel() {
-    let game = $("#game").val();
+    let game = $("#channelName").val();
     if (game === "") {
       alert("Please enter a game name.");
       return;
@@ -28,7 +28,7 @@
         <h2 id="index-page">Ready to catch 'em all?<br>Create a game or Join an exisiting one!</h2><br />
         <div class="col">
           Enter a channel name to create/join:
-          <input id="game" type="text"/>
+          <input id="channelName" type="text"/>
          </div>
          <div class="row"><br /></div>
          <div class="col">
