@@ -18,9 +18,9 @@ class Battle extends React.Component {
       poke1: [],
       poke2: [],
       attacker: "",
-      ready_to_fire: false,
       game_over: false,
       dialogue: "",
+      winner: "",
     };
     this.interval;
     this.effect = "low";
@@ -35,6 +35,11 @@ class Battle extends React.Component {
 
     this.channel.on("state_update", game => {
       this.channel.push("update_state", game)
+        .receive("ok", this.gotView.bind(this))
+    });
+
+    this.channel.on("restart_game", game => {
+      this.channel.push("reset_game", game)
         .receive("ok", this.gotView.bind(this))
     });
   }
@@ -66,9 +71,7 @@ class Battle extends React.Component {
   }
 
   clickAtk(atkBtn){
-    console.log("attacker pressed")
     if(this.state.attacker == this.userName && this.atkClicked == false){
-      console.log("INSIDE")
       if (atkBtn.spl == true){
         if (this.state.attacker == this.state.player1) {
           if (this.state.poke1.energy == 100){
@@ -171,46 +174,38 @@ class Battle extends React.Component {
 
     if (this.state.attacker == this.state.player1){
       pokeball_p1 =   <div className="col" id="poke-turn">
-                        <img src="/images/pokeball.png" width="15%" id="pokeball1"/>
+                        <img src="/images/pokeball.png" width="85%" id="pokeball1"/>
                       </div>;
     } else {
       pokeball_p2 =   <div className="col" id="poke-turn">
-                        <img src="/images/pokeball.png" width="15%" id="pokeball2"/>
+                        <img src="/images/pokeball.png" width="85%" id="pokeball2"/>
                       </div>;
     }
 
-    let winner = null;
-    if (this.state.poke2.hp < this.state.poke1.hp) {
-      winner = this.state.player1;
+
+    let win_popup = <div></div>;
+    let lose_popup = <div></div>;
+    let obs_popup = <div></div>;
+    if (this.state.game_over == true){
+      let win_play = "";
+      if (this.state.winner == this.state.player1){
+        win_play = this.state.player1;
+      } else {
+        win_play = this.state.player2;
+      }
+
+      if (this.userName == this.state.player1 || this.userName == this.state.player2){
+        if (this.state.winner == this.userName){
+          win_popup = <Popup title="Victory!" victor={this.userName} restart={this.restart.bind(this)} />;
+        } else {
+          lose_popup = <Popup title="Defeat!" victor={win_play} restart={this.restart.bind(this)} />;
+        }
+      } else {
+        obs_popup = <Popup title="Game Over!" victor={win_play} />;
+      }
     }
 
-    if (this.state.game_over == true) {
-    // Attribution to: https://www.w3schools.com/bootstrap/tryit.asp?filename=trybs_ref_js_modal_show_hide&stacked=h
-      return (
-        <div className="gameOver" tabIndex="-1" id="gameOver" role="dialog">
-          <div className="modal-dialog" role="document">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h2 className="modal-title">Game over!</h2>
-              </div>
-              <div className="modal-body">
-                <p>{winner} wins the game</p>
-              </div>
-              <div className="modal-footer">
-                <Button type="button" className="btn btn-secondary" onClick={this.restart.bind(this)}>Play Again</Button>
-              </div>
-            </div>
-          </div>
-        </div>);
-    }
-
-    let skill_button = null;
     let empty_div = <div></div>;
-    if (this.userName == this.state.attacker && this.state.ready_to_fire == true) {
-      skill_button = <Button id="stop">Fire! </Button>;
-    }
-
-
 
     let attack_list = empty_div;
     if (this.userName == this.state.player1){
@@ -263,12 +258,12 @@ class Battle extends React.Component {
           </div>
         </div>
         <div className="row">
-          <div className="col">
-            {pokeball_p2}
+          <div className="col-10">
+            <img src={this.state.poke2.image} height="250px" className="poke-img" id="poke2img"/>
           </div>
-          <div className="col">
-            <img src={this.state.poke2.image} height="300px" className="poke-img" id="poke2img"/>
-          </div>
+            <div className="col">
+              {pokeball_p2}
+            </div>
         </div>
       </div>;
     } else {
@@ -281,6 +276,7 @@ class Battle extends React.Component {
 
     return (
     <div className="container" id="battleground">
+      {win_popup}{lose_popup}{obs_popup}
       <div className="row">
         <div className="col">
           <div className="row">
@@ -318,11 +314,11 @@ class Battle extends React.Component {
             </div>
           </div>
           <div className="row">
-            <div className="col-6">
-              <img src={this.state.poke1.image} height="300px" className="poke-img" id="poke1img"/>
-            </div>
-            <div className="col">
+            <div className="col-2">
               {pokeball_p1}
+            </div>
+            <div className="col-10">
+              <img src={this.state.poke1.image} height="250px" className="poke-img" id="poke1img"/>
             </div>
           </div>
         </div>
@@ -371,6 +367,26 @@ class Battle extends React.Component {
   }
 }
 
+//this function generates a function when player wins the game
+// it displays score as well as option to play again
+function Popup(props){
+  let title=props.title;
+  let victor = props.victor;
+  let btn = <div></div>;
+  if (title != "Game Over!"){
+    btn = <Button className="play-again" onClick={() => props.restart()}>Play Again?</Button>;
+  }
+  return(
+      <div className="popup">
+        <div className="popup-content">
+          <h1>{title}</h1>
+          <h3>{victor} has won this Battle!</h3>
+          {btn}
+        </div>
+      </div>
+    )
+}
+
 
 
 //returns the element for tile
@@ -394,23 +410,3 @@ function AttackButton(props) {
   return <Button className={style} val={name} dmg={dmg} spl={spl.toString()} player={player} onClick={() => props.clickAtk(atk)}>{name}</Button>;
 
 }
-
-
-  // $(document).ready(function() {
-  //   var counter = 0,
-  //   progressbar = setInterval(function()
-  //   {
-  //       $('#progressbar .progress-text').text("Attack was " + counter + '% effective');
-  //       $('#progressbar .progress').css({'width':counter+'%'});
-  //       if (counter == 101) {
-  //           clearInterval(progressbar);
-  //           alert('Something went wrong!');
-  //       } else
-  //           counter = (++counter % 101)
-  //
-  //   }, 1);
-  //
-  //   $('#stop').click(function() {
-  //   clearInterval(progressbar);
-  //   });
-  // });

@@ -42,15 +42,6 @@ defmodule PokemonWeb.GamesChannel do
     {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
   end
 
-  def handle_in("clicked", %{}, socket) do
-    name = socket.assigns[:name]
-    game = Pokemon.GameBackup.load(name)
-    game = Game.clicked(game)
-    Pokemon.GameBackup.save(socket.assigns[:name], game)
-    socket = assign(socket, :game, game)
-    broadcast! socket, "update", %{game: game}
-    {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
-  end
 
   def handle_in("attack", params, socket) do
     IO.inspect("ATTACK")
@@ -65,11 +56,26 @@ defmodule PokemonWeb.GamesChannel do
     {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
   end
 
-  def handle_in("restart", %{}, socket) do
-    game = Game.new()
+  def handle_info({:restart_game, game}, socket) do
+    broadcast! socket, "restart_game", game
+    {:noreply, socket}
+  end
+
+  def handle_in("reset_game", game, socket) do
+    userName = socket.assigns[:user]
+    game = Game.add_user(game, userName)
+    send(self, {:game_update, game})
     Pokemon.GameBackup.save(socket.assigns[:name], game)
     socket = assign(socket, :game, game)
-    {:reply, {:ok, %{ "game" => Game.client_view(game)}}, socket}
+    {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
+  end
+
+  def handle_in("restart", %{}, socket) do
+    game = Game.new()
+    send(self, {:restart_game, game})
+    Pokemon.GameBackup.save(socket.assigns[:name], game)
+    socket = assign(socket, :game, game)
+    {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
   end
 
 

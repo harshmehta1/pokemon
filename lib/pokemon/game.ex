@@ -8,9 +8,9 @@ defmodule Pokemon.Game do
       poke1: [],
       poke2: [],
       attacker: "",
-      ready_to_fire: false,
       game_over: false,
-      dialogue: ""
+      dialogue: "",
+      winner: ""
     }
   end
 
@@ -22,9 +22,9 @@ defmodule Pokemon.Game do
       poke1: game.poke1,
       poke2: game.poke2,
       attacker: game.attacker,
-      observers: [],
       game_over: game.game_over,
-      dialogue: game.dialogue
+      dialogue: game.dialogue,
+      winner: game.winner
     }
   end
 
@@ -114,30 +114,11 @@ end
       poke2: Map.get(game, "poke2"),
       observers: [],
       attacker: Map.get(game, "attacker"),
-      ready_to_fire: Map.get(game, "ready_to_fire"),
       game_over: Map.get(game, "game_over"),
-      dialogue: Map.get(game, "dialogue")
+      dialogue: Map.get(game, "dialogue"),
+      winner: Map.get(game, "winner")
     }
   end
-
-  # method to register clicks from UI
-  # def clicked(game) do
-  #   cond do
-  #     game.attacker == game.player1 ->
-  #       %{
-  #         player1: Map.get(game, "player1"),
-  #         player2: Map.get(game, "player2"),
-  #         poke1: Map.get(game, "poke1"),
-  #         poke2: Map.get(game, "poke2"),
-  #         observers: [],
-  #         attacker: Map.get(game, "attacker"),
-  #         ready_to_fire: true
-  #        }
-  #     true ->
-  #       game
-  #       # IO.inspect(game)
-  #   end
-  # end
 
   def attack(game, atkMap) do
     energyFactor = 0
@@ -151,7 +132,7 @@ end
     poke2_weakness = Map.get(game.poke2, "weakness")
     weakness_text = ""
     IO.inspect(random_number)
-    if random_number >= 30 do
+    if random_number >= 20 do
       cond do
         effect == "low" ->
           dmgFactor = 0.5
@@ -179,11 +160,15 @@ end
             weakness_text = Enum.join(["Additonally,",poke2_name,"is weaker to",poke2_weakness,"type Pokemons. Thus, receiving an additional damage of 5 HP!"]," ")
           end
           spl = Map.get(atkMap, "spl")
-          energy = Map.get(game.poke1, "energy")
-            energy = energy + energyFactor
-            if energy > 100 do
-              energy = 100
-            end
+          if spl != "true" do
+            energy = Map.get(game.poke1, "energy")
+              energy = energy + energyFactor
+              if energy > 100 do
+                energy = 100
+              end
+          else
+            energy = 5
+          end
             poke1 = Map.replace!(game.poke1, "energy", energy)
             poke2hp = Map.get(game.poke2, "hp")
             poke2hp = poke2hp - finDmg
@@ -199,6 +184,9 @@ end
               poke2 = Map.replace!(game.poke2, "hp", 0)
               game = Map.replace!(game, :poke2, poke2)
               game = Map.replace!(game, :game_over, true)
+              nd = Enum.join([game.player1,"has WON this battle!"]," ")
+              game = Map.replace!(game, :dialogue, nd)
+              game = Map.replace!(game, :winner, game.player1)
               game
             else
               game
@@ -233,6 +221,9 @@ end
               poke1 = Map.replace!(game.poke1, "hp", 0)
               game = Map.replace!(game, :poke1, poke1)
               game = Map.replace!(game, :game_over, true)
+              nd = Enum.join([game.player2,"has WON this battle!"]," ")
+              game = Map.replace!(game, :dialogue, nd)
+              game = Map.replace!(game, :winner, game.player2)
               game
             else
               game
