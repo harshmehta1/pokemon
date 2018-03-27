@@ -268,6 +268,8 @@ end
   def add_user(game, userName) do
     # IO.inspect(userName)
     cond do
+      game.player1 == userName or game.player2 == userName ->
+        game
       game.player1 == "" and game.player2 == "" ->
         pokemon = randPokemon(game)
         pokemon = Map.put(pokemon, :id, "p1")

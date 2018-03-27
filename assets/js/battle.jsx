@@ -33,7 +33,10 @@ class Battle extends React.Component {
 
     this.channel.join()
       .receive("ok", this.gotView.bind(this))
-      .receive("error", resp => {console.log("Unable to join", resp) });
+      .receive("error", resp => {if (resp == "duplicate") {
+        alert("This user name is taken on this channel. Please try a different username or channel. Redirecting you to lobby now.");
+        window.location.replace("/");
+      } else {console.log("Unable to join", resp) }});
 
     this.channel.on("state_update", game => {
       this.channel.push("update_state", game)
@@ -72,7 +75,7 @@ class Battle extends React.Component {
         this.play();
       }, false);
 
-      audioElement.play();
+      audioElement.pause();
       audioElement.volume = 0.15;
 
       $("#sound").click(function(){

@@ -8,16 +8,36 @@ defmodule PokemonWeb.GamesChannel do
     userName = params["userName"]
     IO.inspect(Pokemon.GameBackup.load(name))
     game = Pokemon.GameBackup.load(name) || Game.new()
-    game = Game.check_duplicates(game, userName)
-    game = Game.add_user(game, userName)
-    send(self, {:after_join, game})
-    Pokemon.GameBackup.save(name, game)
-    socket = socket
-      |> assign(:game, game)
-      |> assign(:name, name)
-      |> assign(:user, userName)
-    {:ok, %{"join" => name, "game" => Game.client_view(game)}, socket}
+    IO.inspect("JOINER FUNCTION")
+    IO.inspect(game)
+    IO.inspect(userName)
+    IO.inspect(game.player1)
+    if game.player1 === userName or game.player2 === userName do
+      {:error, "duplicate"}
+    else
+      game = Game.add_user(game, userName)
+      send(self, {:after_join, game})
+      # send(self, {:duplicate_check, game})
+      Pokemon.GameBackup.save(name, game)
+      socket = socket
+        |> assign(:game, game)
+        |> assign(:name, name)
+        |> assign(:user, userName)
+      {:ok, %{"join" => name, "game" => Game.client_view(game)}, socket}
+    end
+
   end
+
+  # def handle_info({:duplicate_check, game}, socket) do
+  #   IO.inspect("duplciate")
+  #   userName = socket.assigns[:user]
+  #   game = Game.check_duplicates(game, userName)
+  #   {:reply, {:ok, %{"game" => Game.client_view(game)}}, socket}
+  # end
+  #
+  # def handle_in("check_duplicates", game, socket) do
+  #
+  # end
 
   def handle_info({:after_join, game}, socket) do
     IO.inspect("AFTER_JOIN")
