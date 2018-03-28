@@ -1,6 +1,28 @@
 <div id="padit"></div>
 <p class="userdetails">Channel: <%= @game %>.<br>User: <%= @userName %>.</p>
+<button type="button" id="inst-button" class="btn btn-link btn-xs" data-toggle="modal" data-target="#myModal">Instructions</button>
 <img src="/images/poke-logo.png" class="logo" style="width:15%"><br>
+<div class="modal fade" id="myModal" role="dialog">
+  <div class="modal-dialog">
+      <div class="modal-content">
+          <div class="modal-header">
+              <h4 class="modal-title">How to play?</h4>
+              <button type="button" class="close" data-dismiss="modal">&times;</button>
+           </div>
+      <div class="modal-body">
+          <p>1. To invite a friend to play against you, share the channel name with them and ask them to join in with a different username.</p>
+          <p>2. When both players connect, the game will begin.</p>
+          <p>3. Your username appears on top of the Pokemon you are assigned.</p>
+          <p>4. A pokeball besides your pokemon implies it is your turn to attack.</p>
+          <p>5. When it is your turn, select one of the four attacks from the attack dialog in the bottom left corner.</p>
+          <p>6. Once an attack is selected, the effectiveness meter above the dialogue box will start moving.</p>
+          <p>7. You must stop the effectiveness meter with the spacebar to determine your attack's effectiveness. The closer to center you stop, the more effective your attack is.</p>
+          <p>8. Successful attacks reduce your opponent's health, and give you energy based on the effectiveness of the attack.</p>
+          <p>9. The attacks with the orange buttons are special abilities that cause massive HP damage, and can only be used when your energy is 100.</p>
+      </div>
+    </div>
+  </div>
+</div>
 <script>
   window.gameName = "<%= @game %>";
   window.userName = "<%= @userName %>";

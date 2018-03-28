@@ -23,6 +23,32 @@
 </script>
 
 <div class="container">
+  <!-- Modal -->
+
+    <div class="modal fade" id="myModal" role="dialog">
+      <div class="modal-dialog">
+          <div class="modal-content">
+              <div class="modal-header">
+                  <h4 class="modal-title">How to play?</h4>
+                  <button type="button" class="close" data-dismiss="modal">&times;</button>
+               </div>
+          <div class="modal-body">
+              <p>1. Enter a channel name. You will be able to play against an opponent who joins the same channel.</p>
+              <p>2. Enter a username you wish to play as.</p>
+              <p>3. Click the "Let's Play" button.</p>
+              <p>4. Upon joining the game, you will be randomly assigned a Pokemon.</p>
+              <p>5. When both players connect, the game will begin.</p>
+              <p>6. A pokeball besides your pokemon implies it is your turn to attack.</p>
+              <p>7. When it is your turn, select one of the four attacks from the attack dialog in the bottom left corner.</p>
+              <p>8. Once an attack is selected, the effectiveness meter above the dialogue box will start moving.</p>
+              <p>9. You must stop the effectiveness meter with the spacebar to determine your attack's effectiveness. The closer to center you stop, the more effective your attack is.</p>
+              <p>10. Successful attacks reduce your opponent's health, and give you energy based on the effectiveness of the attack.</p>
+              <p>11. The attacks with the orange buttons are special abilities that cause massive HP damage, and can only be used when your energy is 100.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <div class="row">
     <div class="col"><br />
       <div class="index">
@@ -48,7 +74,7 @@
           <div class="centered_buttons">
             <div class="centered_buttons">
               <input id="game-btn" class="btn btn-primary" type="submit" onclick="joinChannel()" value="Let's Play">
-              <button type="button" class="btn btn-warning", onClick="instructions()">How to play?</button>
+              <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#myModal">How to play?</button>
             </div>
           </div>
         </div>

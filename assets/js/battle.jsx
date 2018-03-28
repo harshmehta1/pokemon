@@ -82,7 +82,7 @@ class Battle extends React.Component {
       audioElement.volume = 0.15;
 
 
-      $("#sound").click(function(){
+      $("#sound-img").click(function(){
         if (_.soundPlaying == true){
           audioElement.pause();
           $("#sound-img").attr("src", "/images/sound-off.png");
@@ -275,7 +275,7 @@ class Battle extends React.Component {
     if (attack_list != empty_div) {
       attack_div = <div className="atk-container">{attack_list}</div>;
     }
-    
+
     let p2_div = <div className="col">Waiting for Player 2 to Connect</div>;
     if (this.state.player2 != ""){
       p2_div = <div className="col">

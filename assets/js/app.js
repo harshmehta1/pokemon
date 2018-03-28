@@ -15,6 +15,8 @@ import "phoenix_html";
 import socket from "./socket";
 import play_game from "./battle";
 import {Presence} from "phoenix";
+import "bootstrap";
+
 
 // Import local files
 //
