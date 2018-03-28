@@ -213,11 +213,6 @@ class Battle extends React.Component {
 
   render(){
 
-    if (this.state.duplicate == true) {
-       alert("This user name is taken on this channel. Please try a different user name or channel.")
-          window.history.back();
-    }
-
     let sound_div = <div id="sound"><img src="/images/sound-on.png" id="sound-img"/></div>;
 
 
@@ -280,6 +275,7 @@ class Battle extends React.Component {
     if (attack_list != empty_div) {
       attack_div = <div className="atk-container">{attack_list}</div>;
     }
+    
     let p2_div = <div className="col">Waiting for Player 2 to Connect</div>;
     if (this.state.player2 != ""){
       p2_div = <div className="col">
