@@ -52,7 +52,7 @@ config :phoenix, :stacktrace_depth, 20
 config :pokemon, Pokemon.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "pokemon",
-  password: "Fh4wYQvt9s{Epzk;",
+  password: "water1melon",
   database: "pokemon_dev",
   hostname: "localhost",
   pool_size: 10
