@@ -15,6 +15,6 @@ config :pokemon, PokemonWeb.Endpoint,
 config :pokemon, Pokemon.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "pokemon",
-  password: "water1melon",
+  password: "t^cd\%3qJ+E7x'fT",
   database: "pokemon_prod",
   pool_size: 15
