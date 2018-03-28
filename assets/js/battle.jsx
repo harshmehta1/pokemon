@@ -51,6 +51,7 @@ class Battle extends React.Component {
 
   componentDidMount(){
     $('.mover').css("-webkit-animation-play-state", "paused");
+
     var _ = this;
     $(document).keypress(function(e) {
       if(_.currAtk != null && _.atkClicked != false){
@@ -151,12 +152,16 @@ class Battle extends React.Component {
 
     setTimeout(function(){
       console.log("stopped")
+      $('.mover').css("-webkit-animation-play-state", "running");
+      console.log($('.mover').css("webkitAnimation"))
       $('.mover').css("webkitAnimation", "none");
     }, 1000);
 
     setTimeout(function(){
       console.log("strted anim and paused")
+      console.log($('.mover').css("webkitAnimation"))
       $('.mover').css("webkitAnimation", '');
+      console.log($('.mover').css("webkitAnimation"))
       $('.mover').css("-webkit-animation-play-state", "paused");
     }, 1005);
 
@@ -214,6 +219,19 @@ class Battle extends React.Component {
   render(){
 
     let sound_div = <div id="sound"><img src="/images/sound-on.png" id="sound-img"/></div>;
+
+      console.log(this.userName)
+      console.log(this.state.player1)
+      console.log(this.state.player2)
+      if(this.userName != this.state.player1 && this.userName != this.state.player2){
+        $('.mover').css("visibility", "hidden");
+        $('.skill-bar').css("visibility", "hidden");
+        $('#skilltags').css("visibility", "hidden");
+      } else {
+        $('.mover').css("visibility", "visible");
+        $('.skill-bar').css("visibility", "visible");
+        $('#skilltags').css("visibility", "visible");
+      }
 
 
     if (this.state.dialogue == ""){
