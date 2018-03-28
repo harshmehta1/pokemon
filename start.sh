@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PORT=5101
+export PORT=5200
 
 cd ~/www/pokemon
 ./bin/pokemon stop || true
