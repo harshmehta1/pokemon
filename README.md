@@ -1,5 +1,7 @@
 # Pokemon
 
+http://pokemon.mehtaharsh.me/
+
 To start your Phoenix server:
 
   * Install dependencies with `mix deps.get`
